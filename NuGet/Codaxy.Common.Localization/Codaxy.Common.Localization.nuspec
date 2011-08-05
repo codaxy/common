@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata schemaVersion="2">
+    <id>Codaxy.Common.Localization</id>    
+    <title>Codaxy.Common.Localization Library</title>
+    <version>0.1.0</version>
+    <authors>Codaxy</authors>
+    <description>Codaxy.Common.Localization Library provides helpers for application localization</description>
+	<dependencies>
+		<dependency id="Codaxy.Common" />
+	</dependencies>
+	<projectUrl>http://code.google.com/p/codaxy-common2/</projectUrl></metadata>
+</package>

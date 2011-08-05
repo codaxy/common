@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata schemaVersion="2">
+    <id>Codaxy.Common</id>    
+    <title>Codaxy.Common Library</title>
+    <version>0.5.0</version>
+    <authors>Codaxy</authors>
+    <description>Codaxy.Common Library provides set of commonly used tools and utilities</description>
+	<projectUrl>http://code.google.com/p/codaxy-common2/</projectUrl></metadata>
+</package>
