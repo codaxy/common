@@ -1,0 +1,4 @@
+
+*.nupkg
+Codaxy.Common/lib
+Codaxy.Common.Localization/lib
