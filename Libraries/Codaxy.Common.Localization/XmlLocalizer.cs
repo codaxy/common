@@ -6,9 +6,9 @@ using System.IO;
 using System.Xml;
 using System.Reflection;
 using Codaxy.Common.Logging;
-using Codaxy.Common.Localization.Xml;
+using System.Collections.Concurrent;
 
-namespace Codaxy.Common.Localization.Xml
+namespace Codaxy.Common.Localization
 {
     public class UnsupportedLanguageException : Exception  {}
 
@@ -38,22 +38,27 @@ namespace Codaxy.Common.Localization.Xml
         public XmlLocalizationStore GetXmlLocalizationStore(string langCode)
         {
             if (String.IsNullOrEmpty(langCode))
-                throw new Exception();
+                throw new UnsupportedLanguageException();
+
+
+            XmlLocalizationStore store;
+            if (cache.TryGetValue(langCode, out store))
+                return store;
+
+            if (!LangCodes.Contains(langCode))
+                throw new UnsupportedLanguageException();
+
+            store = new XmlLocalizationStore(langCode, Path, providers)
+            {
+                Logger = Logger
+            };
 
             lock (cache)
-            {
-                XmlLocalizationStore store;
-                if (cache.TryGetValue(langCode, out store))
-                    return store;
-                
-                if (!LangCodes.Contains(langCode))
-                    throw new UnsupportedLanguageException();
-
-                return cache[langCode] = store = new XmlLocalizationStore(langCode, Path, providers)
-                {
-                    Logger = Logger
-                };
+            {                
+                cache[langCode] = store;
             }
+
+            return store;
         }
 
         Dictionary<String, XmlLocalizationStore> cache = new Dictionary<string, XmlLocalizationStore>();
@@ -65,15 +70,15 @@ namespace Codaxy.Common.Localization.Xml
 
         public String[] GetLocalizedAssemblyNames()
         {
-            return AssemblyHelper.GetLocalizedAssemblyNames();      
+            return LocalizationAssemblyHelper.GetLocalizedAssemblyNames();      
         }
 
         public void WriteDefaultLocalizationData()
         {
-            foreach (var a in AssemblyHelper.GetLocalizedAssemblies())
+            foreach (var a in LocalizationAssemblyHelper.GetLocalizedAssemblies())
             {
-                var data = AssemblyHelper.GetDefaultLocalizationData(a, providers);
-                using (var xw = new XmlTextWriter(PathUtil.GetDefaultLocalizationFilePath(Path, a), Encoding.UTF8))
+                var data = LocalizationAssemblyHelper.GetDefaultLocalizationData(a, providers);
+                using (var xw = new XmlTextWriter(XmlPathUtil.GetDefaultLocalizationFilePath(Path, a), Encoding.UTF8))
                 {
                     xw.Formatting = Formatting.Indented;
                     data.WriteXml(xw);

@@ -103,9 +103,6 @@ namespace Codaxy.Common.Localization
                     }
                     while (xr.ReadToNextSibling("type"));
             return new LocalizationData(res);
-        }
-
-
-        
+        }        
     }
 }

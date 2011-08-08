@@ -7,7 +7,7 @@ using Codaxy.Common.Logging;
 using System.IO;
 using System.Reflection;
 
-namespace Codaxy.Common.Localization.Xml
+namespace Codaxy.Common.Localization
 {
     public class XmlLocalizationStore : ILocalizationStore
     {
@@ -29,7 +29,7 @@ namespace Codaxy.Common.Localization.Xml
 
         String GetXmlFilePath(String assemblyName)
         {
-            return PathUtil.GetLocalizationFilePath(Path, assemblyName, LangCode);
+            return XmlPathUtil.GetLocalizationFilePath(Path, assemblyName, LangCode);
         }        
 
         LocalizationData ReadAssemblyLocalization(String assemblyName)
@@ -104,7 +104,7 @@ namespace Codaxy.Common.Localization.Xml
 
         void LoadAssemblyLocalizationData(Assembly assembly)
         {
-            var assemblyName = AssemblyHelper.GetAssemblyName(assembly);
+            var assemblyName = LocalizationAssemblyHelper.GetAssemblyName(assembly);
             if (loadedAssemblies.Contains(assemblyName))
                 return;
             var assemblyLocData = GetLocalizationData(assembly);
@@ -114,15 +114,15 @@ namespace Codaxy.Common.Localization.Xml
 
         public LocalizationData GetLocalizationData(Assembly assembly)
         {
-            var assemblyLocData = AssemblyHelper.GetDefaultLocalizationData(assembly, providers);
-            var overrideData = ReadAssemblyLocalization(AssemblyHelper.GetAssemblyName(assembly));
+            var assemblyLocData = LocalizationAssemblyHelper.GetDefaultLocalizationData(assembly, providers);
+            var overrideData = ReadAssemblyLocalization(LocalizationAssemblyHelper.GetAssemblyName(assembly));
             assemblyLocData.Override(overrideData);
             return assemblyLocData;
         }
 
         public LocalizationData GetLocalizationData(String assemblyName)
         {
-            var assembly = AssemblyHelper.GetAssembly(assemblyName);
+            var assembly = LocalizationAssemblyHelper.GetAssembly(assemblyName);
             return GetLocalizationData(assembly);
         }
 

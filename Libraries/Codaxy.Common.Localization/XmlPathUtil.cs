@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 
-namespace Codaxy.Common.Localization.Xml
+namespace Codaxy.Common.Localization
 {
-    class PathUtil
+    class XmlPathUtil
     {
         public static String GetLocalizationFilePath(String basePath, String assemblyName, String langCode)
         {
@@ -15,7 +15,7 @@ namespace Codaxy.Common.Localization.Xml
 
         public static String GetDefaultLocalizationFilePath(String basePath, Assembly assembly)
         {
-            return System.IO.Path.Combine(basePath, AssemblyHelper.GetAssemblyName(assembly) + ".xml");
+            return System.IO.Path.Combine(basePath, LocalizationAssemblyHelper.GetAssemblyName(assembly) + ".xml");
         }
     }
 }

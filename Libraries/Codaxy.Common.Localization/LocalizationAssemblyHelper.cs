@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using Codaxy.Common.Reflection;
+using System.Xml;
 
 namespace Codaxy.Common.Localization
 {
-    class AssemblyHelper
+    class LocalizationAssemblyHelper
     {
         public static Type[] GetLocalizationTypesForAssembly(params Assembly[] assemblies)
         {
@@ -22,7 +24,7 @@ namespace Codaxy.Common.Localization
 
         public static IEnumerable<Assembly> GetLocalizedAssemblies()
         {
-            return Codaxy.Common.Reflection.AssemblyHelper.GetAttributedAssemblies(typeof(LocalizationAttribute));            
+            return AssemblyHelper.GetAttributedAssemblies(typeof(LocalizationAttribute));            
         }
 
         public static String[] GetLocalizedAssemblyNames()
@@ -46,6 +48,19 @@ namespace Codaxy.Common.Localization
                 res.Include(data);
             }
             return res;
-        }       
+        }
+
+        public static void WriteDefaultLocalizationData(String outputDirectoryPath, IEnumerable<ILocalizationDataProvider> providers)
+        {
+            foreach (var a in LocalizationAssemblyHelper.GetLocalizedAssemblies())
+            {
+                var data = LocalizationAssemblyHelper.GetDefaultLocalizationData(a, providers);
+                using (var xw = new XmlTextWriter(XmlPathUtil.GetDefaultLocalizationFilePath(outputDirectoryPath, a), Encoding.UTF8))
+                {
+                    xw.Formatting = Formatting.Indented;
+                    data.WriteXml(xw);
+                }
+            }
+        }
     }
 }
