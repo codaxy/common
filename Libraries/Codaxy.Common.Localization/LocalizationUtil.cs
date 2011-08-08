@@ -23,17 +23,17 @@ namespace Codaxy.Common.Localization
             return res;
         }
 
-        static ILocalizer globalLocalizer;
+        static ILocalizer globalLocalizer = new DummyLocalizer();
 
         public static void SetGlobalLocalizer(ILocalizer localizer)
         {
+            if (localizer == null)
+                throw new ArgumentNullException("localizer");
             globalLocalizer = localizer;
         }
 
         public static T Localize<T>() where T : new()
-        {
-            if (globalLocalizer == null)
-                throw new InvalidOperationException("Global localizer not set. Use LocalizationUtil.SetGlobalLocalizer to define global localizer.");
+        {            
             return globalLocalizer.Get<T>(Thread.CurrentThread.CurrentCulture.Name);
         }
     }
