@@ -3,7 +3,7 @@
   <metadata schemaVersion="2">
     <id>Codaxy.Common</id>    
     <title>Codaxy.Common Library</title>
-    <version>0.5.2</version>
+    <version>0.5.3</version>
     <authors>Codaxy</authors>
     <description>Codaxy.Common Library provides set of commonly used tools and utilities</description>
 	<projectUrl>http://code.google.com/p/codaxy-common2/</projectUrl></metadata>
