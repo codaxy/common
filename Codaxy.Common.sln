@@ -7,6 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codaxy.Common.Localization"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codaxy.Common.SqlServer", "Libraries\Codaxy.Common.SqlServer\Codaxy.Common.SqlServer.csproj", "{E4A358E2-2A98-4C47-83D7-F57E12A3C9C0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuSpec", "NuSpec", "{53D1E255-7E03-46B4-9DDA-B1730126728B}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Codaxy.Common.Localization\Codaxy.Common.Localization.nuspec = NuGet\Codaxy.Common.Localization\Codaxy.Common.Localization.nuspec
+		NuGet\Codaxy.Common\Codaxy.Common.nuspec = NuGet\Codaxy.Common\Codaxy.Common.nuspec
+		NuGet\Codaxy.Common.SqlServer\Codaxy.Common.SqlServer.nuspec = NuGet\Codaxy.Common.SqlServer\Codaxy.Common.SqlServer.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

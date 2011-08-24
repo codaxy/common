@@ -18,7 +18,7 @@ namespace Codaxy.Common.SqlServer
             {
                 var db = server.Databases[databaseName];
                 if (db == null)
-                    throw new InvalidDatabaseOperationException(String.Format("Database '{0}' not found on server.", databaseName));
+                    throw new InvalidDatabaseOperationException(String.Format("Database '{0}' not found on the server.", databaseName));
 
                 foreach (var script in scripts)
                     try

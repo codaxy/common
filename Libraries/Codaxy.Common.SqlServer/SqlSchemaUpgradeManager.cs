@@ -82,7 +82,7 @@ namespace Codaxy.Common.SqlServer
             var server = GetServer(out databaseName);
             var db = server.Databases[databaseName];
             if (db == null)
-                throw new InvalidDatabaseOperationException(String.Format("Database '{0}' not found on server.", databaseName));
+                throw new InvalidDatabaseOperationException(String.Format("Database '{0}' not found on the server.", databaseName));
 
 
             String currentVersion;

@@ -23,18 +23,25 @@ namespace Codaxy.Common.SqlServer
 
         protected Server GetServer(out String databaseName)
         {
-            SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(ConnectionString);
-            sc = new ServerConnection(csb.DataSource);
-            if (!csb.IntegratedSecurity)
-            {
-                sc.LoginSecure = false;
-                sc.Login = csb.UserID;
-                sc.Password = csb.Password;
-            }            
-            databaseName = csb.InitialCatalog;
-            server = new Server(sc);
-            //TODO: Validate server connection
-            return server;
+			try
+			{
+				SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(ConnectionString);
+				sc = new ServerConnection(csb.DataSource);
+				if (!csb.IntegratedSecurity)
+				{
+					sc.LoginSecure = false;
+					sc.Login = csb.UserID;
+					sc.Password = csb.Password;
+				}
+				databaseName = csb.InitialCatalog;
+				server = new Server(sc);
+				//TODO: Validate server connection
+				return server;
+			}
+			catch (Exception ex)
+			{
+				throw new InvalidDatabaseOperationException("Connection problem. Check inner exception for details.", ex);
+			}
         }
 
         public virtual void Dispose()
