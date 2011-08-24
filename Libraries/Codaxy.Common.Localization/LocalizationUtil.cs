@@ -23,8 +23,7 @@ namespace Codaxy.Common.Localization
             return res;
         }
 
-        static ILocalizer globalLocalizer = new DummyLocalizer();
-
+        static ILocalizer globalLocalizer = new EmbeddedXmlLocalizer();
         public static void SetGlobalLocalizer(ILocalizer localizer)
         {
             if (localizer == null)
@@ -35,6 +34,11 @@ namespace Codaxy.Common.Localization
         public static T Localize<T>() where T : new()
         {            
             return globalLocalizer.Get<T>(Thread.CurrentThread.CurrentCulture.Name);
+        }
+
+        public static T LocalizeUI<T>() where T : new()
+        {
+            return globalLocalizer.Get<T>(Thread.CurrentThread.CurrentUICulture.Name);
         }
     }
 }

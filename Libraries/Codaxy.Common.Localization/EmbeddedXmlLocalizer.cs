@@ -7,13 +7,9 @@ namespace Codaxy.Common.Localization
 {
     class EmbeddedXmlLocalizer : ILocalizer
     {
-        public String[] LangCodes { get; private set; }
-
-        public EmbeddedXmlLocalizer(String[] supportedLangCodes)
+        public EmbeddedXmlLocalizer()
         {
-            if (supportedLangCodes == null)
-                throw new ArgumentNullException("langCodes");
-            LangCodes = supportedLangCodes;
+            
         }
 
         public ILocalizationStore GetLocalizationStore(string langCode)
@@ -25,9 +21,6 @@ namespace Codaxy.Common.Localization
             if (cache.TryGetValue(langCode, out store))
                 return store;
 
-            if (!LangCodes.Contains(langCode))
-                throw new UnsupportedLanguageException();
-
             store = new EmbeddedXmlLocalizationStore(langCode);
 
             lock (cache)
@@ -36,7 +29,7 @@ namespace Codaxy.Common.Localization
             }
 
             return store;
-        }        
+        }
 
         Dictionary<String, ILocalizationStore> cache = new Dictionary<string, ILocalizationStore>();
 
