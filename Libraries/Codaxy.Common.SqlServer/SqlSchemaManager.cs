@@ -8,7 +8,7 @@ using Microsoft.SqlServer.Management.Common;
 
 namespace Codaxy.Common.SqlServer
 {
-    public class DatabaseManager : IDisposable
+    public class SqlSchemaManager : IDisposable
     {
         public String ConnectionString { get; set; }
 
@@ -39,7 +39,10 @@ namespace Codaxy.Common.SqlServer
 
         public virtual void Dispose()
         {
-            if (sc != null)
+			if (server != null && server.ConnectionContext!=null)
+				server.ConnectionContext.Disconnect();			
+
+            if (sc != null && sc.IsOpen)
                 sc.Disconnect();
         }
     }

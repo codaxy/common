@@ -6,27 +6,49 @@ using Microsoft.SqlServer.Management.Smo;
 using Codaxy.Common.Logging;
 using System.Data.SqlClient;
 using Microsoft.SqlServer.Management.Common;
+using System.IO;
 
 namespace Codaxy.Common.SqlServer
 {
-    public class SqlScript
+    public class SqlSchemaUpgradeManager : SqlSchemaManager
     {
-        public String Name { get; set; }
-        public String SQL { get; set; }
+		public SqlSchemaUpgradeManager()
+		{
+			GetVersionSqlCommandText = "SELECT [Current] FROM [Version]";
+			SetVersionSqlCommandText = "UPDATE [Version] SET [Current]='{Version}'";
+			ScriptVersionNumberGetter = DefaultScriptVersionNumberGetter;
+		}
 
-    }
-    public interface ISqlScriptRepository
-    {
-        SqlScript[] GetScripts();
-    }
-
-    public class SqlDatabaseUpgradeManager : DatabaseManager
-    {        
+		/// <summary>
+		/// Database backup directory.
+		/// </summary>
         public String BackupLocation { get; set; }
+
+		/// <summary>
+		/// Set to true to backup database before upgrade is performed. If upgrde fails database will be restored from the backup.
+		/// </summary>
         public bool UpgradeBackupAndRestoreOnError { get; set; }
-        public Func<String, String> ScriptVersionNumberGetter { get; set; }
-        public Logger Logger { get; set; }
+
+		/// <summary>
+		/// Extract database version from script name. By default first 4 letters are used and must be digits.
+		/// </summary>
+        public Func<String, String> ScriptVersionNumberGetter { get; set; }        
+		
+		/// <summary>
+		/// Logger for the upgrade.
+		/// </summary>
+		public Logger Logger { get; set; }
+
+		/// <summary>
+		/// SQL command used to retrieve current version of database schema. 
+		/// Default: SELECT [Current] FROM [Version]
+		/// </summary>
         public String GetVersionSqlCommandText { get; set; }
+
+		/// <summary>
+		/// SQL command to set new version number
+		/// Default: UPDATE [Version] SET [Current]='{Version}';
+		/// </summary>
         public String SetVersionSqlCommandText { get; set; }
 
         class ScriptInfo
@@ -49,7 +71,7 @@ namespace Codaxy.Common.SqlServer
                 throw new InvalidDatabaseManagerSettingsException("SetVersionSqlCommandText");
         }
 
-        public bool Upgrade(SqlScript[] scripts)
+        public bool UpgradeSchema(SqlScript[] scripts)
         {
             Validate();
             if (scripts.Length == 0)
@@ -74,22 +96,23 @@ namespace Codaxy.Common.SqlServer
                 throw new InvalidDatabaseOperationException("Could not determine current version of the database. Check get version command.", ex);
             }
 
-            ScriptInfo[] sortedScripts;
-            String targetVersion;
-            try
-            {
-                sortedScripts = scripts.Select(a => new ScriptInfo
-                    {
-                        Version = ScriptVersionNumberGetter(a.Name),
-                        Script = a
-                    }).OrderBy(a => a.Version).ThenBy(a => a.Script.Name).ToArray();
-                targetVersion = sortedScripts.Last().Version;
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidDatabaseOperationException("Could not determine script version.", ex);
-            }
+			List<ScriptInfo> sortedScripts = new List<ScriptInfo>();
+			foreach (var script in scripts)
+				try
+				{
+					sortedScripts.Add(new ScriptInfo
+					{
+						Version = ScriptVersionNumberGetter(script.Name),
+						Script = script
+					});
+				}
+				catch (Exception ex)
+				{
+					throw new InvalidDatabaseOperationException(String.Format("Could not determine upgrade script '{0}' version.", script.Name), ex);
+				}
 
+			sortedScripts = sortedScripts.OrderBy(a => a.Version).ThenBy(a => a.Script.Name).ToList();
+			var targetVersion = sortedScripts.Last().Version;
             if (String.Compare(currentVersion, targetVersion) >= 0)
             {
                 Logger.InfoFormat("Database schema is up to date. (Version: '{0}')", currentVersion);
@@ -173,8 +196,8 @@ namespace Codaxy.Common.SqlServer
         private void PrepareForUpgrade(Server server, String databaseName, String currentVersion)
         {
             if (UpgradeBackupAndRestoreOnError)
-            {
-                backupFilePath = BackupLocation.TrimEnd('\\') + "\\" + databaseName + String.Format("-{0}", currentVersion) + "-migration" + String.Format("-{0:yyyy-MM-dd hh-mm-ss-fff}", DateTime.Now) + ".bak";
+            {				
+				backupFilePath = Path.Combine(BackupLocation ?? "", databaseName + String.Format("-{0}", currentVersion) + "-migration" + String.Format("-{0:yyyy-MM-dd hh-mm-ss-fff}", DateTime.Now) + ".bak");
 
                 Logger.InfoFormat("Creating database backup at '{0}'.", backupFilePath);
 
@@ -246,6 +269,20 @@ namespace Codaxy.Common.SqlServer
         {
             Logger.Info("Database restored.");
         }
+
+		String DefaultScriptVersionNumberGetter(String scriptName)
+		{
+			try
+			{
+				if (scriptName.Length > 4 && !Char.IsDigit(scriptName[4]))
+				{
+					var v = int.Parse(scriptName.Substring(0, 4));
+					return v.ToString("0000");
+				}
+			}
+			catch { }
+			throw new InvalidOperationException();
+		}
     }
 
 }

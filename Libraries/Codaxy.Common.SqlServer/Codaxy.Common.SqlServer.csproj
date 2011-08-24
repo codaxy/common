@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SqlServer.Smo, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
@@ -44,17 +47,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DatabaseCreateManager.cs" />
-    <Compile Include="DatabaseManager.cs" />
-    <Compile Include="InvalidDatabaseOperationException.cs" />
+    <Compile Include="SqlSchemaCreateManager.cs" />
+    <Compile Include="SqlSchemaManager.cs" />
+    <Compile Include="SqlScript.cs" />
+    <Compile Include="SqlServerUtil.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DatabaseUpgradeManager.cs" />
+    <Compile Include="SqlSchemaUpgradeManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Codaxy.Common\Codaxy.Common.csproj">
       <Project>{02C30976-A2C3-457D-ABB9-83F517FD063F}</Project>
       <Name>Codaxy.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

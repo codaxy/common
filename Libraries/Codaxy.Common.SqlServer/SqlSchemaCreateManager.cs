@@ -7,9 +7,9 @@ using Microsoft.SqlServer.Management.Smo;
 
 namespace Codaxy.Common.SqlServer
 {
-    class DatabaseCreateManager : DatabaseManager
+    class SqlSchemaCreateManager : SqlSchemaManager
     {
-        public void CreateDatabase(SqlScript[] scripts)
+        public void CreateSchema(SqlScript[] scripts)
         {
             Validate();
             string databaseName;
