@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace Codaxy.Common.Logging
 {
-    class DebugLogAppender : ILogAppender
+    public class DebugLogAppender : ILogAppender
     {
         public void Log(LogEntry le)
         {
