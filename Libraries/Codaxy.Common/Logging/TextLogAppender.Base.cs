@@ -35,7 +35,7 @@ namespace Codaxy.Common.Logging
 
 					foreach (var le in e.Items)
 					{
-						writer.WriteLine(String.Format("{0:yyyy-MM-dd HH:mm:ss} {1:-10} {2}: {3}", le.Message.Time, le.Message.Level.ToString(), le.LoggerName, le.Message.Message));
+						writer.WriteLine(String.Format("{0:yyyy-MM-dd HH:mm:ss.fff} {1:-10} {2}: {3}", le.Message.Time, le.Message.Level.ToString(), le.LoggerName, le.Message.Message));
 						if (le.Message.StackTrace != null)
 						{
 							writer.Write("\t\t\t");

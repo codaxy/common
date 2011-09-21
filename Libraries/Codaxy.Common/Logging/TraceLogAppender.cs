@@ -10,7 +10,7 @@ namespace Codaxy.Common.Logging
     {
         public void Log(LogEntry le)
         {
-            Trace.WriteLine(String.Format("{0} {1:-10} {2}: {3}", le.Message.Time, le.Message.Level.ToString(), le.LoggerName, le.Message.Message));
+            Trace.WriteLine(String.Format("{0:yyyy-MM-dd HH:mm:ss.fff} {1:-10} {2}: {3}", le.Message.Time, le.Message.Level.ToString(), le.LoggerName, le.Message.Message));
             if (le.Message.StackTrace != null)
             {
                 Trace.Write("\t\t\t");
