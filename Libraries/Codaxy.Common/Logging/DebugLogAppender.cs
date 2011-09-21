@@ -6,8 +6,12 @@ using System.Diagnostics;
 
 namespace Codaxy.Common.Logging
 {
+    /// <summary>
+    /// It will not work if you are using Nuget, as assembly needs to be compiled with DEBUG option
+    /// </summary>
     public class DebugLogAppender : ILogAppender
     {
+#if DEBUG
         public void Log(LogEntry le)
         {
             Debug.WriteLine(String.Format("{0} {1:-10} {2}: {3}", le.Message.Time, le.Message.Level.ToString(), le.LoggerName, le.Message.Message));
@@ -17,5 +21,8 @@ namespace Codaxy.Common.Logging
                 Debug.WriteLine(le.Message.StackTrace);
             }
         }
+#else
+        public void Log(LogEntry le) {}
+#endif
     }
 }
