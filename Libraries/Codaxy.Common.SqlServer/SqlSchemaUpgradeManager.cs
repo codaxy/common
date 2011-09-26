@@ -71,7 +71,7 @@ namespace Codaxy.Common.SqlServer
                 throw new InvalidDatabaseManagerSettingsException("SetVersionSqlCommandText");
         }
 
-        String GetCurrentSchemaVersion()
+        public String GetCurrentSchemaVersion()
         {
             using (var connection = new SqlConnection(ConnectionString))
             {                
@@ -84,12 +84,30 @@ namespace Codaxy.Common.SqlServer
             }
         }
 
+        List<ScriptInfo> PrepareScripts(SqlScript[] scripts)
+        {
+            List<ScriptInfo> sortedScripts = new List<ScriptInfo>();
+            foreach (var script in scripts)
+                try
+                {
+                    sortedScripts.Add(new ScriptInfo
+                    {
+                        Version = ScriptVersionNumberGetter(script.Name),
+                        Script = script
+                    });
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidDatabaseOperationException(String.Format("Could not determine upgrade script '{0}' version.", script.Name), ex);
+                }
+            return sortedScripts;
+        }
+
         public bool UpgradeSchema(SqlScript[] scripts)
         {
             Validate();
             if (scripts.Length == 0)
-                return false;
-            bool upgradeStarted = false;
+                return false;            
            
             String currentVersion;
             try
@@ -103,21 +121,7 @@ namespace Codaxy.Common.SqlServer
                 throw new InvalidDatabaseOperationException("Could not determine current version of the database. Check the get version command.", ex);
             }
 
-			List<ScriptInfo> sortedScripts = new List<ScriptInfo>();
-			foreach (var script in scripts)
-				try
-				{
-					sortedScripts.Add(new ScriptInfo
-					{
-						Version = ScriptVersionNumberGetter(script.Name),
-						Script = script
-					});
-				}
-				catch (Exception ex)
-				{
-					throw new InvalidDatabaseOperationException(String.Format("Could not determine upgrade script '{0}' version.", script.Name), ex);
-				}
-
+            List<ScriptInfo> sortedScripts = PrepareScripts(scripts);
 			sortedScripts = sortedScripts.OrderBy(a => a.Version).ThenBy(a => a.Script.Name).ToList();
 			var targetVersion = sortedScripts.Last().Version;
             if (String.Compare(currentVersion, targetVersion) >= 0)
@@ -126,6 +130,12 @@ namespace Codaxy.Common.SqlServer
                 return false;
             }
 
+            return DoUpgrade(currentVersion, targetVersion, sortedScripts);
+        }
+
+        bool DoUpgrade(String currentVersion, string targetVersion, List<ScriptInfo> sortedScripts) 
+        {
+            bool upgradeStarted = false;
             string databaseName;
             var server = GetServer(out databaseName);
             var db = server.Databases[databaseName];

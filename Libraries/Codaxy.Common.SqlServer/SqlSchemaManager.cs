@@ -14,6 +14,7 @@ namespace Codaxy.Common.SqlServer
 
         ServerConnection sc;
         Server server;
+        bool disposed = true;
 
         protected virtual void Validate()
         {
@@ -27,6 +28,7 @@ namespace Codaxy.Common.SqlServer
 			{
 				SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(ConnectionString);
 				sc = new ServerConnection(csb.DataSource);
+                disposed = false;
 				if (!csb.IntegratedSecurity)
 				{
 					sc.LoginSecure = false;
@@ -46,8 +48,17 @@ namespace Codaxy.Common.SqlServer
 
         public virtual void Dispose()
         {
-			if (server != null && server.ConnectionContext!=null)
-				server.ConnectionContext.Disconnect();			
+            if (!disposed)
+            {
+                disposed = true;
+                DoDispose();
+            }
+        }
+
+        private void DoDispose()
+        {
+            if (server != null && server.ConnectionContext != null)
+                server.ConnectionContext.Disconnect();
 
             if (sc != null && sc.IsOpen)
                 sc.Disconnect();
