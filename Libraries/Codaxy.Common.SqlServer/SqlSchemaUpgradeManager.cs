@@ -71,29 +71,36 @@ namespace Codaxy.Common.SqlServer
                 throw new InvalidDatabaseManagerSettingsException("SetVersionSqlCommandText");
         }
 
+        String GetCurrentSchemaVersion()
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {                
+                using (var cmd = new SqlCommand(GetVersionSqlCommandText, connection))
+                {
+                    connection.Open();                
+                    var version = System.Convert.ToString(cmd.ExecuteScalar());
+                    return version;
+                }
+            }
+        }
+
         public bool UpgradeSchema(SqlScript[] scripts)
         {
             Validate();
             if (scripts.Length == 0)
                 return false;
             bool upgradeStarted = false;
-
-            string databaseName;
-            var server = GetServer(out databaseName);
-            var db = server.Databases[databaseName];
-            if (db == null)
-                throw new InvalidDatabaseOperationException(String.Format("Database '{0}' not found on the server.", databaseName));
-
-
+           
             String currentVersion;
             try
             {
-                var ds = db.ExecuteWithResults(GetVersionSqlCommandText);
-                currentVersion = ds.Tables[0].Rows[0][0].ToString();
+                //var ds = db.ExecuteWithResults(GetVersionSqlCommandText);
+                //currentVersion = ds.Tables[0].Rows[0][0].ToString();
+                currentVersion = GetCurrentSchemaVersion();
             }
             catch (Exception ex)
             {
-                throw new InvalidDatabaseOperationException("Could not determine current version of the database. Check get version command.", ex);
+                throw new InvalidDatabaseOperationException("Could not determine current version of the database. Check the get version command.", ex);
             }
 
 			List<ScriptInfo> sortedScripts = new List<ScriptInfo>();
@@ -118,6 +125,12 @@ namespace Codaxy.Common.SqlServer
                 Logger.InfoFormat("Database schema is up to date. (Version: '{0}')", currentVersion);
                 return false;
             }
+
+            string databaseName;
+            var server = GetServer(out databaseName);
+            var db = server.Databases[databaseName];
+            if (db == null)
+                throw new InvalidDatabaseOperationException(String.Format("Database '{0}' not found on the server.", databaseName));
 
             try
             {
