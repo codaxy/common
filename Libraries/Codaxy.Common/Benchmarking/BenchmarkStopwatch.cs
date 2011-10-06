@@ -23,7 +23,7 @@ namespace Codaxy.Common.Benchmarking
             watch = Stopwatch.StartNew();
         }
 
-        public void ReportPhaseCompleted(String phaseName)
+        internal void ReportPhaseCompleted(String phaseName)
         {
             watch.Stop();
             var total = watch.Elapsed;
@@ -42,4 +42,15 @@ namespace Codaxy.Common.Benchmarking
 
         public TimeSpan Elapsed { get { return watch.Elapsed; } }
     }
+
+    public static class BenchmarkStopwatchExtensions
+    {
+        public static void ReportPhaseCompleted(this BenchmarkStopwatch b, String phaseName)
+        {
+            if (b!=null)
+                b.ReportPhaseCompleted(phaseName);
+        }
+    }
 }
+
+
