@@ -209,13 +209,14 @@ namespace Codaxy.Common.SqlServer
                 FreeUpgradeResources();
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
                 try
                 {
                     if (upgradeStarted)
                         try
                         {
+                            Logger.Exception("Database upgrade error occured. Database will be restored.", ex);
                             RollbackUpgrade(server, databaseName);
                             Logger.Error("Database restored to original version.");
                             FreeUpgradeResources();
