@@ -10,6 +10,19 @@ using System.IO;
 
 namespace Codaxy.Common.SqlServer
 {
+    public class SqlSchemaUpgradeScripts
+    {        
+        /// <summary>
+        /// Theses scripts must follow versioning convention
+        /// </summary>
+        public SqlScript[] UpgradeScripts { get; set; }
+
+        /// <summary>
+        /// Theses scripts do not have to follow versioning convention
+        /// </summary>
+        public SqlScript[] AfterUpgradeScripts { get; set; }
+    }
+
     public class SqlSchemaUpgradeManager : SqlSchemaManager
     {
 		public SqlSchemaUpgradeManager()
@@ -105,9 +118,17 @@ namespace Codaxy.Common.SqlServer
 
         public bool UpgradeSchema(SqlScript[] scripts)
         {
+            return UpgradeSchema(new SqlSchemaUpgradeScripts
+            {
+                UpgradeScripts = scripts
+            });
+        }
+
+        public bool UpgradeSchema(SqlSchemaUpgradeScripts scripts)
+        {
             Validate();
-            if (scripts.Length == 0)
-                return false;            
+            if (scripts.UpgradeScripts == null || scripts.UpgradeScripts.Length == 0)
+                return false;           
            
             String currentVersion;
             try
@@ -121,7 +142,7 @@ namespace Codaxy.Common.SqlServer
                 throw new InvalidDatabaseOperationException("Could not determine current version of the database. Check the get version command.", ex);
             }
 
-            List<ScriptInfo> sortedScripts = PrepareScripts(scripts);
+            List<ScriptInfo> sortedScripts = PrepareScripts(scripts.UpgradeScripts);
 			sortedScripts = sortedScripts.OrderBy(a => a.Version).ThenBy(a => a.Script.Name).ToList();
 			var targetVersion = sortedScripts.Last().Version;
             if (String.Compare(currentVersion, targetVersion) >= 0)
@@ -130,10 +151,10 @@ namespace Codaxy.Common.SqlServer
                 return false;
             }
 
-            return DoUpgrade(currentVersion, targetVersion, sortedScripts);
+            return DoUpgrade(currentVersion, targetVersion, sortedScripts, scripts.AfterUpgradeScripts);
         }
 
-        bool DoUpgrade(String currentVersion, string targetVersion, List<ScriptInfo> sortedScripts) 
+        bool DoUpgrade(String currentVersion, string targetVersion, List<ScriptInfo> sortedScripts, SqlScript[] afterUpgradeScripts) 
         {
             bool upgradeStarted = false;
             string databaseName;
@@ -162,7 +183,18 @@ namespace Codaxy.Common.SqlServer
                         }
                         catch (Exception ex)
                         {
-                            throw new ExecuteDatabaseScriptException("Database script '{0}' failed. Check inner exception for more details.", ex, script.Script);
+                            throw new ExecuteDatabaseScriptException(String.Format("Database script '{0}' failed. Check inner exception for more details.", script.Script.Name), ex, script.Script);
+                        }
+
+                if (afterUpgradeScripts!=null)
+                    foreach (var script in afterUpgradeScripts)
+                        try
+                        {
+                            db.ExecuteNonQuery(script.SQL);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new ExecuteDatabaseScriptException(String.Format("Database script '{0}' failed. Check inner exception for more details.", script.Name), ex, script);
                         }
 
                 try
