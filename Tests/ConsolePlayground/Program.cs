@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Codaxy.Common.SqlServer;
+using Codaxy.Common.Logging;
 
 namespace ConsolePlayground
 {
@@ -13,16 +14,17 @@ namespace ConsolePlayground
             using (var driver = new Codaxy.Common.SqlServer.SqlSchemaUpgradeManager
             {
                 BackupLocation = ".",
-                ConnectionString = "Server=.;Database=EntranceDev;Integrated Security=True",                
-                GetVersionSqlCommandText = "SELECT [Current] FROM [Version]",
-                SetVersionSqlCommandText = "UPDATE [Version] SET [Current]='{Version}'",
-                UpgradeBackupAndRestoreOnError = false
+                ConnectionString = "Server=.;Database=ECardDev;Integrated Security=True",                
+                GetVersionSqlCommandText = "SELECT [Current] FROM ec.[Version]",
+                SetVersionSqlCommandText = "UPDATE ec.[Version] SET [Current]='{Version}'",
+                UpgradeBackupAndRestoreOnError = true,
+                Logger = new Logger(new ConsoleLogAppender(), "")                
             })
             {                
                 driver.UpgradeSchema(new SqlScript[] {  
                      new SqlScript { 
-                         SQL = "SELECT 1", 
-                         Name = "0001.sql"
+                         SQL = "AAAFFF", 
+                         Name = "1000.sql"
                      }
                 });
             }

@@ -51,17 +51,21 @@ namespace Codaxy.Common.SqlServer
             if (!disposed)
             {
                 disposed = true;
-                DoDispose();
+                CloseConnection();
             }
         }
 
-        private void DoDispose()
+        protected void CloseConnection()
         {
             if (server != null && server.ConnectionContext != null)
+            {
                 server.ConnectionContext.Disconnect();
+            }
 
             if (sc != null && sc.IsOpen)
+            {
                 sc.Disconnect();
+            }
         }
     }
 }

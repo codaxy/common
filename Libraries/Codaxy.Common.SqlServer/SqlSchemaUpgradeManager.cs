@@ -86,14 +86,21 @@ namespace Codaxy.Common.SqlServer
 
         public String GetCurrentSchemaVersion()
         {
-            using (var connection = new SqlConnection(ConnectionString))
-            {                
-                using (var cmd = new SqlCommand(GetVersionSqlCommandText, connection))
+            try
+            {
+                using (var connection = new SqlConnection(ConnectionString))
                 {
-                    connection.Open();                
-                    var version = System.Convert.ToString(cmd.ExecuteScalar());
-                    return version;
+                    using (var cmd = new SqlCommand(GetVersionSqlCommandText, connection))
+                    {
+                        connection.Open();
+                        var version = System.Convert.ToString(cmd.ExecuteScalar());
+                        return version;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidDatabaseOperationException("Could not determine current version of the database. Check the get version command.", ex);
             }
         }
 
@@ -128,19 +135,9 @@ namespace Codaxy.Common.SqlServer
         {
             Validate();
             if (scripts.UpgradeScripts == null || scripts.UpgradeScripts.Length == 0)
-                return false;           
-           
-            String currentVersion;
-            try
-            {
-                //var ds = db.ExecuteWithResults(GetVersionSqlCommandText);
-                //currentVersion = ds.Tables[0].Rows[0][0].ToString();
-                currentVersion = GetCurrentSchemaVersion();
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidDatabaseOperationException("Could not determine current version of the database. Check the get version command.", ex);
-            }
+                return false;
+
+            String currentVersion = GetCurrentSchemaVersion();
 
             List<ScriptInfo> sortedScripts = PrepareScripts(scripts.UpgradeScripts);
 			sortedScripts = sortedScripts.OrderBy(a => a.Version).ThenBy(a => a.Script.Name).ToList();
@@ -211,6 +208,7 @@ namespace Codaxy.Common.SqlServer
             }
             catch(Exception ex)
             {
+                CloseConnection();
                 try
                 {
                     if (upgradeStarted)
@@ -228,7 +226,7 @@ namespace Codaxy.Common.SqlServer
                 }
                 finally
                 {
-                    server.ConnectionContext.Disconnect();
+                    CloseConnection();
                 }
                 throw;
             }
@@ -292,27 +290,22 @@ namespace Codaxy.Common.SqlServer
                 Logger.InfoFormat("Restoring database from '{0}'.", backupFilePath);
 
                 var db = server.Databases[databaseName];
-                db.SetOffline();
-                try
-                {
-                    Restore restoreDB = new Restore();
-                    restoreDB.Database = databaseName;
-                    /* Specify whether you want to restore database, files or log */
-                    restoreDB.Action = RestoreActionType.Database;
-                    restoreDB.Devices.AddDevice(backupFilePath, DeviceType.File);
 
-                    restoreDB.ReplaceDatabase = true;
-                    restoreDB.NoRecovery = false;
+                server.KillAllProcesses(databaseName);
 
-                    restoreDB.PercentComplete += restoreDB_PercentComplete;
-                    restoreDB.Complete += restoreDB_Complete;
+                Restore restoreDB = new Restore();
+                restoreDB.Database = databaseName;
+                /* Specify whether you want to restore database, files or log */
+                restoreDB.Action = RestoreActionType.Database;
+                restoreDB.Devices.AddDevice(backupFilePath, DeviceType.File);
 
-                    restoreDB.SqlRestore(server);
-                }
-                finally
-                {
-                    db.SetOnline();
-                }
+                restoreDB.ReplaceDatabase = true;
+                restoreDB.NoRecovery = false;
+
+                restoreDB.PercentComplete += restoreDB_PercentComplete;
+                restoreDB.Complete += restoreDB_Complete;
+
+                restoreDB.SqlRestore(server);
             }
         }
 

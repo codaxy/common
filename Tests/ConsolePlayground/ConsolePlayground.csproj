@@ -51,6 +51,13 @@
       <Project>{E4A358E2-2A98-4C47-83D7-F57E12A3C9C0}</Project>
       <Name>Codaxy.Common.SqlServer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Codaxy.Common\Codaxy.Common.csproj">
+      <Project>{02C30976-A2C3-457D-ABB9-83F517FD063F}</Project>
+      <Name>Codaxy.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
