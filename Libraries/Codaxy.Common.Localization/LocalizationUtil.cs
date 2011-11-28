@@ -40,5 +40,10 @@ namespace Codaxy.Common.Localization
         {
             return globalLocalizer.Get<T>(Thread.CurrentThread.CurrentUICulture.Name);
         }
+
+        public static void WriteLocalizationFiles(String outputDirectoryPath, IEnumerable<ILocalizationDataProvider> providers)
+        {
+            LocalizationAssemblyHelper.WriteDefaultLocalizationData(outputDirectoryPath, providers);
+        }
     }
 }
