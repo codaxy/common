@@ -71,12 +71,13 @@ namespace Codaxy.Common.Localization
             if (loadedAssemblies.Contains(assembly))
                 return;
             var assemblyLocData = GetLocalizationData(assembly);
+            localizationData.Include(assemblyLocData);
             loadedAssemblies.Add(assembly);
         }
 
         public LocalizationData GetLocalizationData(Assembly assembly)
         {
-            var embeddedPath = String.Format("Localization.{0}.xml", LangCode);
+            var embeddedPath = String.Format(@"Localization\{0}.xml", LangCode);
             try
             {
                 using (var fs = AssemblyHelper.ReadEmbeddedFile(assembly, embeddedPath))

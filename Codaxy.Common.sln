@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuSpec", "NuSpec", "{53D1E2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsolePlayground", "Tests\ConsolePlayground\ConsolePlayground.csproj", "{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codaxy.Common.Tests", "Tests\Codaxy.Common.Tests\Codaxy.Common.Tests.csproj", "{6420CF1D-7CD9-4752-B62B-8A449D3F3277}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +68,16 @@ Global
 		{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}.Release|Mixed Platforms.Build.0 = Release|x86
 		{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}.Release|x86.ActiveCfg = Release|x86
 		{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}.Release|x86.Build.0 = Release|x86
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|x86.ActiveCfg = Debug|x86
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|x86.Build.0 = Debug|x86
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|Any CPU.ActiveCfg = Release|x86
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|Mixed Platforms.Build.0 = Release|x86
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|x86.ActiveCfg = Release|x86
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

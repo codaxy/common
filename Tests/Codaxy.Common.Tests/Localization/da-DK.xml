@@ -1,0 +1,5 @@
+﻿<localization>
+  <type name="Codaxy.Common.Tests.Tests.Loc.EmbeddedLocalizerTests+Messages">
+    <field name="TestMessage">This is a test message in Danish.</field>
+  </type>
+</localization>
