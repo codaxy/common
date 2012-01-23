@@ -188,18 +188,19 @@ namespace Codaxy.Common.Logging
 				logger.Log(GetExceptionMessage(message, ex));
 		}
 
-		public static LogMessage GetExceptionMessage(String message, Exception ex)
-		{
-			StringBuilder stackTrace = new StringBuilder();
-			var cex = ex;
-			int nest = 5;
-			while (cex != null && --nest >= 0)
-			{
-				stackTrace.AppendLine(ex.StackTrace);
-				cex = ex.InnerException != ex ? ex.InnerException : null;
-			}
-			return new LogMessage { Message = message + " (" + ex.Message + ")", StackTrace = stackTrace.ToString(), Level = LogLevel.Error };
-		}
+        public static LogMessage GetExceptionMessage(String message, Exception ex)
+        {
+            StringBuilder stackTrace = new StringBuilder();
+            stackTrace.AppendLine(ex.StackTrace);
+            if (ex.InnerException != null)
+                stackTrace.Append("Inner Exception: ").AppendLine(ex.InnerException.ToString());
+            return new LogMessage
+            {
+                Message = message + " (" + ex.Message + ")",
+                StackTrace = stackTrace.ToString(),
+                Level = LogLevel.Error
+            };
+        }
 
 		public static Logger ChildLogger(this Logger logger, String childLoggerName)
 		{
