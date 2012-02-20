@@ -36,7 +36,7 @@ namespace Codaxy.Common.Logging
     {		
 		ILogAppender LogAppender { get; set; }
 		
-		public Logger(ILogAppender appender, String name)
+		public Logger(ILogAppender appender, String name = "")
 		{			
 			Enabled = true;
 			LogAppender = appender;
@@ -178,7 +178,7 @@ namespace Codaxy.Common.Logging
 
 		public static void Exception(this Logger logger, Exception ex)
 		{
-			if (logger != null)
+			if (logger != null && ex!=null)
 				logger.Log(new LogMessage { Message = ex.Message, StackTrace = ex.StackTrace, Level = LogLevel.Error });
 		}
 
@@ -190,14 +190,21 @@ namespace Codaxy.Common.Logging
 
         public static LogMessage GetExceptionMessage(String message, Exception ex)
         {
-            StringBuilder stackTrace = new StringBuilder();
-            stackTrace.AppendLine(ex.StackTrace);
+            if (ex == null)
+                return new LogMessage
+                {
+                    Message = message,
+                    Level = LogLevel.Error
+                };
+
+            var stackTrace = ex.StackTrace;
             if (ex.InnerException != null)
-                stackTrace.Append("Inner Exception: ").AppendLine(ex.InnerException.ToString());
+                stackTrace += "Inner Exception: " + ex.InnerException.ToString();
+
             return new LogMessage
             {
                 Message = message + " (" + ex.Message + ")",
-                StackTrace = stackTrace.ToString(),
+                StackTrace = stackTrace,
                 Level = LogLevel.Error
             };
         }

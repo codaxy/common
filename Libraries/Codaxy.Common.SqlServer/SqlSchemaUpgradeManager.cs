@@ -64,6 +64,12 @@ namespace Codaxy.Common.SqlServer
 		/// </summary>
         public String SetVersionSqlCommandText { get; set; }
 
+
+        /// <summary>
+        /// Set to true to delete backup file if upgrade is sucessfull.
+        /// </summary>
+        public bool DeleteBackupFileAfterSuccessfulUpgrade { get; set; }
+
         class ScriptInfo
         {
             public String Version { get; set; }
@@ -236,7 +242,7 @@ namespace Codaxy.Common.SqlServer
         {
             try
             {
-                if (System.IO.File.Exists(backupFilePath))
+                if (DeleteBackupFileAfterSuccessfulUpgrade && System.IO.File.Exists(backupFilePath))
                     System.IO.File.Delete(backupFilePath);
             }
             catch (Exception ex)
@@ -267,7 +273,7 @@ namespace Codaxy.Common.SqlServer
                 bkpDBFull.Initialize = true;
                 bkpDBFull.PercentComplete += bkpDBFull_PercentComplete;
                 bkpDBFull.Complete += bkpDBFull_Complete;
-                bkpDBFull.SqlBackup(server);
+                bkpDBFull.SqlBackup(server);                
             }
             else
                 backupFilePath = null;
