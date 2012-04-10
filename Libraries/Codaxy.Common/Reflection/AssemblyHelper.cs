@@ -77,9 +77,13 @@ namespace Codaxy.Common.Reflection
         }
 
         public static Stream ReadEmbeddedFile(Assembly assembly, String fileName)
-        {            
-            var name = assembly.GetName().Name + "." + fileName.Replace("\\", ".").TrimStart('.');
-            return assembly.GetManifestResourceStream(name);
+        {
+            var internalPath = "." + fileName.Replace("\\", ".").TrimStart('.');
+            var name = assembly.GetName().Name + internalPath;
+            var stream =  assembly.GetManifestResourceStream(name);
+            if (stream != null)
+                return stream;
+            //In case where default namespace is different
         }
 
         public static String ReadEmbeddedText(Assembly assembly, String fileName)
