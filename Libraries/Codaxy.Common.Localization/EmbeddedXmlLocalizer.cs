@@ -21,10 +21,11 @@ namespace Codaxy.Common.Localization
             if (cache.TryGetValue(langCode, out store))
                 return store;
 
-            store = new EmbeddedXmlLocalizationStore(langCode);
-
             lock (cache)
             {
+                if (cache.TryGetValue(langCode, out store))
+                    return store;
+                store = new EmbeddedXmlLocalizationStore(langCode);                
                 cache[langCode] = store;
             }
 

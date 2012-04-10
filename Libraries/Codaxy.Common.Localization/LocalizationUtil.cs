@@ -31,6 +31,8 @@ namespace Codaxy.Common.Localization
             globalLocalizer = localizer;
         }
 
+        public static ILocalizer Localizer { get { return globalLocalizer; } set { SetGlobalLocalizer(value); } }
+
         public static T Localize<T>() where T : new()
         {            
             return globalLocalizer.Get<T>(Thread.CurrentThread.CurrentCulture.Name);
@@ -39,7 +41,7 @@ namespace Codaxy.Common.Localization
         public static T LocalizeUI<T>() where T : new()
         {
             return globalLocalizer.Get<T>(Thread.CurrentThread.CurrentUICulture.Name);
-        }
+        }        
 
         public static void WriteLocalizationFiles(String outputDirectoryPath, IEnumerable<ILocalizationDataProvider> providers)
         {
