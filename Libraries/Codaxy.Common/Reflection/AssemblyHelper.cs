@@ -83,7 +83,14 @@ namespace Codaxy.Common.Reflection
             var stream =  assembly.GetManifestResourceStream(name);
             if (stream != null)
                 return stream;
-            //In case where default namespace is different
+            //In case where default namespace is different from assembly name 
+            //we have to use different approach
+
+            name = assembly.GetManifestResourceNames().FirstOrDefault(a => a.EndsWith(internalPath));
+            if (name == null)
+                return null;
+
+            return assembly.GetManifestResourceStream(name);
         }
 
         public static String ReadEmbeddedText(Assembly assembly, String fileName)
