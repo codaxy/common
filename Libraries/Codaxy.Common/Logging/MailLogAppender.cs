@@ -79,7 +79,7 @@ namespace Codaxy.Common.Logging
                             smtp.UseDefaultCredentials = true;
 
                         smtp.EnableSsl = Smtp.SSL;
-                        smtp.SendAsync(msg, null);
+                        smtp.Send(msg);
                     }
                 }
             }
