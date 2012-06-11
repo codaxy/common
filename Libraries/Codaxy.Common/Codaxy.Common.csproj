@@ -73,6 +73,9 @@
     <Compile Include="Globalization\CultureScope.cs" />
     <Compile Include="IO\DirectoryUtil.cs" />
     <Compile Include="IO\StreamUtil.cs" />
+    <Compile Include="Logging\ForwardAppender.cs" />
+    <Compile Include="Logging\MailLogAppender.cs" />
+    <Compile Include="Logging\EventLogAppender.cs" />
     <Compile Include="Logging\TraceLogAppender.cs" />
     <Compile Include="Logging\DebugLogAppender.cs" />
     <Compile Include="Logging\ILogAppender.cs" />
