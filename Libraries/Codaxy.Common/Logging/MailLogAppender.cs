@@ -14,6 +14,8 @@ namespace Codaxy.Common.Logging
         public String Bcc { get; set; }
         public String From { get; set; }
 
+        public bool AppendLogLevelToMessageSubject { get; set; }
+
         public class SmtpConfiguration
         {
             public String Host { get; set; }
@@ -67,6 +69,8 @@ namespace Codaxy.Common.Logging
 
                     msg.Body = mb.ToString();
                     msg.Subject = Subject;
+                    if (AppendLogLevelToMessageSubject)
+                        msg.Subject += " " + entry.Message.Level.ToString();
 
                     using (var smtp = new SmtpClient(Smtp.Host, Smtp.Port))
                     {
