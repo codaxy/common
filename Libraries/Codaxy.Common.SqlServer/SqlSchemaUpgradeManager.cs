@@ -180,6 +180,7 @@ namespace Codaxy.Common.SqlServer
             {
                 foreach (var script in sortedScripts)
                     if (String.Compare(script.Version, currentVersion) > 0)
+                    {
                         try
                         {
                             db.ExecuteNonQuery(script.Script.SQL);
@@ -188,6 +189,16 @@ namespace Codaxy.Common.SqlServer
                         {
                             throw new ExecuteDatabaseScriptException(String.Format("Database script '{0}' failed. Check inner exception for more details.", script.Script.Name), ex, script.Script);
                         }
+
+                        try
+                        {
+                            db.ExecuteNonQuery(SetVersionSqlCommandText.Replace("{Version}", targetVersion));
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new InvalidDatabaseOperationException("Setting the new database version failed. Check set version command and inner exception for more details.", ex);
+                        }
+                    }
 
                 if (afterUpgradeScripts!=null)
                     foreach (var script in afterUpgradeScripts)
@@ -199,15 +210,7 @@ namespace Codaxy.Common.SqlServer
                         {
                             throw new ExecuteDatabaseScriptException(String.Format("Database script '{0}' failed. Check inner exception for more details.", script.Name), ex, script);
                         }
-
-                try
-                {
-                    db.ExecuteNonQuery(SetVersionSqlCommandText.Replace("{Version}", targetVersion));
-                }
-                catch (Exception ex)
-                {
-                    throw new InvalidDatabaseOperationException("Setting the new database version failed. Check set version command and inner exception for more details.", ex);
-                }
+                
                 Logger.InfoFormat("Database has been successfully upgraded to version '{0}'.", targetVersion);
                 FreeUpgradeResources();
                 return true;
