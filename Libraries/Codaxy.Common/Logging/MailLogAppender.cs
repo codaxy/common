@@ -47,7 +47,7 @@ namespace Codaxy.Common.Logging
             {
                 StringBuilder mb = new StringBuilder();
 
-                mb.AppendFormat("{0} {1}:", entry.Message.Time, entry.LoggerName).AppendLine();
+                mb.AppendFormat("{0:yyyy-MM-dd HH:mm:ss.fff} {1}: {2}", entry.Message.Time, entry.Message.Level, entry.LoggerName).AppendLine();
                 mb.AppendLine();
                 mb.AppendLine(entry.Message.Message);
 

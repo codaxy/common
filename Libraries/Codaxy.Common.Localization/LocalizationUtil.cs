@@ -31,16 +31,19 @@ namespace Codaxy.Common.Localization
             globalLocalizer = localizer;
         }
 
+        public static ILocalizationStore CurrentCulture { get { return Localizer.GetLocalizationStore(Thread.CurrentThread.CurrentCulture.Name); } }
+        public static ILocalizationStore CurrentUICulture { get { return Localizer.GetLocalizationStore(Thread.CurrentThread.CurrentUICulture.Name); } }
+
         public static ILocalizer Localizer { get { return globalLocalizer; } set { SetGlobalLocalizer(value); } }
 
         public static T Localize<T>() where T : new()
-        {            
-            return globalLocalizer.Get<T>(Thread.CurrentThread.CurrentCulture.Name);
+        {
+            return CurrentCulture.Get<T>();
         }
 
         public static T LocalizeUI<T>() where T : new()
         {
-            return globalLocalizer.Get<T>(Thread.CurrentThread.CurrentUICulture.Name);
+            return CurrentUICulture.Get<T>();
         }        
 
         public static void WriteLocalizationFiles(String outputDirectoryPath, IEnumerable<ILocalizationDataProvider> providers)
