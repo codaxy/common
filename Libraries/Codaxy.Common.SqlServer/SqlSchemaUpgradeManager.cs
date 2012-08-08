@@ -192,7 +192,7 @@ namespace Codaxy.Common.SqlServer
 
                         try
                         {
-                            db.ExecuteNonQuery(SetVersionSqlCommandText.Replace("{Version}", targetVersion));
+                            db.ExecuteNonQuery(SetVersionSqlCommandText.Replace("{Version}", script.Version));
                         }
                         catch (Exception ex)
                         {
