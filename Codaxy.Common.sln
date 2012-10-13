@@ -18,6 +18,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsolePlayground", "Tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codaxy.Common.Tests", "Tests\Codaxy.Common.Tests\Codaxy.Common.Tests.csproj", "{6420CF1D-7CD9-4752-B62B-8A449D3F3277}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{E85ADE73-7664-4663-AAE0-E4A52A2188E8}"
+	ProjectSection(SolutionItems) = preProject
+		Automatically embedding SQL scripts.txt = Automatically embedding SQL scripts.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

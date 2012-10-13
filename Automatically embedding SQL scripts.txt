@@ -1,0 +1,7 @@
+Add this to your project file:
+
+<Target Name="BeforeBuild">
+    <ItemGroup>
+      <EmbeddedResource Include="**\*.sql" />
+    </ItemGroup>
+  </Target>

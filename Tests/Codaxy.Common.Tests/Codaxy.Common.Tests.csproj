@@ -11,7 +11,8 @@
     <RootNamespace>Codaxy.Common.Tests</RootNamespace>
     <AssemblyName>Codaxy.Common.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -46,17 +47,23 @@
     <Compile Include="PetaTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlServer\SqlServerUtilTests.cs" />
     <Compile Include="Tests\Loc\EmbeddedLocalizerTests.cs" />
     <Compile Include="Tests\Logging\LoggingTests.cs" />
     <Compile Include="Tests\Ref\ReadEmbeddedFileTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Codaxy.Common.Localization\Codaxy.Common.Localization.csproj">
       <Project>{76F86DBB-F340-4F23-8038-81572E1C34C8}</Project>
       <Name>Codaxy.Common.Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Codaxy.Common.SqlServer\Codaxy.Common.SqlServer.csproj">
+      <Project>{E4A358E2-2A98-4C47-83D7-F57E12A3C9C0}</Project>
+      <Name>Codaxy.Common.SqlServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Codaxy.Common\Codaxy.Common.csproj">
       <Project>{02C30976-A2C3-457D-ABB9-83F517FD063F}</Project>
@@ -68,6 +75,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Embedded.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Embedded\0001 - Order.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Embedded\0002 - Order.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -33,7 +33,7 @@ namespace Codaxy.Common.SqlServer
 					}
 				}
 			}
-			return result.ToArray();
+			return result.OrderBy(a=>a.Name).ToArray();
 		}
 
 		public static SqlScript[] ReadDirectory(String directoryPath)
@@ -44,7 +44,35 @@ namespace Codaxy.Common.SqlServer
 			{
 				result.Add(new SqlScript { SQL = File.ReadAllText(file.FullName), Name = file.Name });
 			}
-			return result.ToArray();
+			return result.OrderBy(a=>a.Name).ToArray();
 		}
+
+        public static SqlScript[] ReadEmbeddedDirectory(Assembly assembly, String directory)
+        {
+            List<SqlScript> result = new List<SqlScript>();
+
+            var internalDirectory = assembly.GetName().Name + "." + directory.Replace("\\", ".").Trim('.') + ".";
+
+            foreach (var file in assembly.GetManifestResourceNames())
+            {
+                if (file.EndsWith(".sql", StringComparison.InvariantCultureIgnoreCase)
+                    && file.StartsWith(internalDirectory, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var fileName = file.Substring(internalDirectory.Length);
+
+                    using (var fs = assembly.GetManifestResourceStream(file))
+                    using (var sr = new StreamReader(fs))
+                    {
+                        var command = sr.ReadToEnd();
+                        result.Add(new SqlScript
+                        {
+                            Name = fileName,
+                            SQL = command
+                        });
+                    }
+                }
+            }
+            return result.OrderBy(a=>a.Name).ToArray();
+        }
 	}
 }
