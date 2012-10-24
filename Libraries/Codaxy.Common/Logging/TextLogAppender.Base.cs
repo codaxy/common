@@ -40,6 +40,7 @@ namespace Codaxy.Common.Logging
 						{
 							writer.Write("\t\t\t");
 							writer.WriteLine(le.Message.StackTrace);
+                            writer.WriteLine(); //extra line after the mess that stack trace made
 						}
 					}
 					writer.Flush();
