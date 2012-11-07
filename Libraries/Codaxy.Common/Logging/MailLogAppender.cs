@@ -30,10 +30,9 @@ namespace Codaxy.Common.Logging
 
         public String Subject { get; set; }
 
-        public MailLogAppender()
-        {
-            
-        }
+        public bool SendAsync { get; set; }
+
+        public Logger SmtpErrorLogger { get; set; }
 
         public void Log(LogEntry entry)
         {
@@ -76,13 +75,17 @@ namespace Codaxy.Common.Logging
 
                     using (var smtp = GetSmtpClient())
                     {
-                        smtp.Send(msg);
+                        if (SendAsync)
+                            smtp.SendAsync(msg, null);
+                        else
+                            smtp.Send(msg);
                     }
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("MailLogAppender.Log exception: " + ex);
+                SmtpErrorLogger.Exception("Error occured while sending log entry email.", ex);
             }
         }
 
