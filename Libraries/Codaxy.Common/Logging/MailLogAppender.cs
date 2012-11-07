@@ -5,6 +5,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Net.Mail;
 using System.Net;
+using System.Threading;
 
 namespace Codaxy.Common.Logging
 {
@@ -56,29 +57,46 @@ namespace Codaxy.Common.Logging
                     mb.AppendLine(entry.Message.StackTrace);
                 }
 
-                using (var msg = new MailMessage())
+                var msg = new MailMessage();
+
+                if (!String.IsNullOrWhiteSpace(Bcc))
+                    msg.Bcc.Add(PrepareAddresses(Bcc));
+
+                if (!String.IsNullOrWhiteSpace(To))
+                    msg.To.Add(PrepareAddresses(To));
+
+                if (!String.IsNullOrEmpty(From))
+                    msg.From = new MailAddress(From);
+
+                msg.Body = mb.ToString();
+
+                msg.Subject = Subject;
+                if (AppendLogLevelToMessageSubject)
+                    msg.Subject += " " + entry.Message.Level.ToString();
+
+                if (SendAsync)
+                    ThreadPool.QueueUserWorkItem(Send, msg);
+                else
+                    Send(msg);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("MailLogAppender.Log exception: " + ex);
+                SmtpErrorLogger.Exception("Error occured while sending log entry email.", ex);
+            }
+        }
+
+        void Send(object state)
+        {
+            try
+            {
+                var msg = state as MailMessage;
+                if (msg != null)
                 {
-                    if (!String.IsNullOrWhiteSpace(Bcc))
-                        msg.Bcc.Add(PrepareAddresses(Bcc));
-                    
-                    if (!String.IsNullOrWhiteSpace(To))
-                        msg.To.Add(PrepareAddresses(To));
-                    
-                    if (!String.IsNullOrEmpty(From))
-                        msg.From = new MailAddress(From);
-
-                    msg.Body = mb.ToString();
-                    
-                    msg.Subject = Subject;
-                    if (AppendLogLevelToMessageSubject)
-                        msg.Subject += " " + entry.Message.Level.ToString();
-
+                    using (msg)
                     using (var smtp = GetSmtpClient())
                     {
-                        if (SendAsync)
-                            smtp.SendAsync(msg, null);
-                        else
-                            smtp.Send(msg);
+                        smtp.Send(msg);
                     }
                 }
             }
