@@ -32,16 +32,16 @@ namespace Codaxy.Common.Logging
 
         public MailLogAppender()
         {
-            Smtp = new SmtpConfiguration();
+            
         }
 
         public void Log(LogEntry entry)
         {
-            if (Smtp == null || Smtp.Host == null || From == null)
-            {
-                Debug.WriteLine("Mail appender not configured properly.");
-                return;
-            }
+            //if (Smtp == null || Smtp.Host == null || From == null)
+            //{
+            //    Debug.WriteLine("Mail appender not configured properly.");
+            //    return;
+            //}
 
             try
             {
@@ -64,25 +64,18 @@ namespace Codaxy.Common.Logging
                     
                     if (!String.IsNullOrWhiteSpace(To))
                         msg.To.Add(PrepareAddresses(To));
-
-                    msg.From = new MailAddress(From);
+                    
+                    if (!String.IsNullOrEmpty(From))
+                        msg.From = new MailAddress(From);
 
                     msg.Body = mb.ToString();
+                    
                     msg.Subject = Subject;
                     if (AppendLogLevelToMessageSubject)
                         msg.Subject += " " + entry.Message.Level.ToString();
 
-                    using (var smtp = new SmtpClient(Smtp.Host, Smtp.Port))
+                    using (var smtp = GetSmtpClient())
                     {
-                        if (Smtp.Password != null)
-                        {
-                            smtp.UseDefaultCredentials = false;
-                            smtp.Credentials = new NetworkCredential(Smtp.Username, Smtp.Password);
-                        }
-                        else
-                            smtp.UseDefaultCredentials = true;
-
-                        smtp.EnableSsl = Smtp.SSL;
                         smtp.Send(msg);
                     }
                 }
@@ -91,6 +84,25 @@ namespace Codaxy.Common.Logging
             {
                 Debug.WriteLine("MailLogAppender.Log exception: " + ex);
             }
+        }
+
+        public SmtpClient GetSmtpClient()
+        {
+            if (Smtp == null)
+                return new SmtpClient();
+
+            var client = new SmtpClient(Smtp.Host, Smtp.Port);
+
+            if (Smtp.Password != null)
+            {
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(Smtp.Username, Smtp.Password);
+            }
+            else
+                client.UseDefaultCredentials = true;
+
+            client.EnableSsl = Smtp.SSL;
+            return client;
         }
 
         private string PrepareAddresses(string a)
