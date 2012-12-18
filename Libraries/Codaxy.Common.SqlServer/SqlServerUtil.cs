@@ -47,11 +47,11 @@ namespace Codaxy.Common.SqlServer
 			return result.OrderBy(a=>a.Name).ToArray();
 		}
 
-        public static SqlScript[] ReadEmbeddedDirectory(Assembly assembly, String directory)
+        public static SqlScript[] ReadEmbeddedDirectory(Assembly assembly, String directory, bool absolutePath=false)
         {
             List<SqlScript> result = new List<SqlScript>();
 
-            var internalDirectory = assembly.GetName().Name + "." + directory.Replace("\\", ".").Trim('.') + ".";
+            var internalDirectory = (absolutePath ? "" : assembly.GetName().Name + ".")  + directory.Replace("\\", ".").Trim('.') + ".";
 
             foreach (var file in assembly.GetManifestResourceNames())
             {
