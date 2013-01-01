@@ -24,6 +24,19 @@ namespace Codaxy.Common.Logging
     {
         public String LoggerName { get; set; }
         public LogMessage Message { get; set; }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(String.Format("{0:yyyy-MM-dd HH:mm:ss.fff} {1:-10} {2}: {3}", Message.Time, Message.Level.ToString(), LoggerName, Message.Message));
+            if (Message.StackTrace != null)
+            {
+                sb.Append("\t\t\t");
+                sb.AppendLine(Message.StackTrace);
+                sb.AppendLine(); //extra line after the mess that stack trace made
+            }
+            return sb.ToString();
+        }
     }
    
 
@@ -199,7 +212,7 @@ namespace Codaxy.Common.Logging
 
             var stackTrace = ex.StackTrace;
             if (ex.InnerException != null)
-                stackTrace += "Inner Exception: " + ex.InnerException.ToString();
+                stackTrace += Environment.NewLine + Environment.NewLine + "Inner Exception: " + ex.InnerException.ToString();
 
             return new LogMessage
             {
