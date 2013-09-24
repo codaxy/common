@@ -78,7 +78,6 @@
     <Compile Include="Logging\MailLogAppender.cs" />
     <Compile Include="Logging\EventLogAppender.cs" />
     <Compile Include="Logging\TraceLogAppender.cs" />
-    <Compile Include="Logging\DebugLogAppender.cs" />
     <Compile Include="Logging\ILogAppender.cs" />
     <Compile Include="Logging\TextLogAppender.Console.cs" />
     <Compile Include="Logging\TextLogAppender.Base.cs" />
