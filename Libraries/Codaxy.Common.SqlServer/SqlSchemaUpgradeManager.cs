@@ -106,7 +106,7 @@ namespace Codaxy.Common.SqlServer
             }
             catch (Exception ex)
             {
-                throw new InvalidDatabaseOperationException("Could not determine current version of the database. Check the get version command.", ex);
+                throw new InvalidDatabaseOperationException("Could not determine current version of the database. It could be a connection problem. Check inner exception for more details.", ex);
             }
         }
 
@@ -150,7 +150,7 @@ namespace Codaxy.Common.SqlServer
 			var targetVersion = sortedScripts.Last().Version;
             if (String.Compare(currentVersion, targetVersion) >= 0)
             {
-                Logger.InfoFormat("Database schema is up to date. (Version: '{0}')", currentVersion);
+                Logger.TraceFormat("Database schema is up to date. (Version: '{0}')", currentVersion);
                 return false;
             }
 
@@ -262,7 +262,7 @@ namespace Codaxy.Common.SqlServer
             {				
 				backupFilePath = Path.Combine(BackupLocation ?? "", databaseName + String.Format("-{0}", currentVersion) + "-migration" + String.Format("-{0:yyyy-MM-dd hh-mm-ss-fff}", DateTime.Now) + ".bak");
 
-                Logger.InfoFormat("Creating database backup at '{0}'.", backupFilePath);
+                Logger.DebugFormat("Creating database backup at '{0}'.", backupFilePath);
 
                 Backup bkpDBFull = new Backup();
 
@@ -284,7 +284,7 @@ namespace Codaxy.Common.SqlServer
 
         void bkpDBFull_Complete(object sender, ServerMessageEventArgs e)
         {
-            Logger.Info("Database backup complete.");
+            Logger.Trace("Database backup complete.");
         }
 
         void bkpDBFull_PercentComplete(object sender, PercentCompleteEventArgs e)
@@ -296,7 +296,7 @@ namespace Codaxy.Common.SqlServer
         {
             if (backupFilePath != null)
             {
-                Logger.InfoFormat("Restoring database from '{0}'.", backupFilePath);
+                Logger.DebugFormat("Restoring database from '{0}'.", backupFilePath);
 
                 var db = server.Databases[databaseName];
 
@@ -325,7 +325,7 @@ namespace Codaxy.Common.SqlServer
 
         void restoreDB_Complete(object sender, ServerMessageEventArgs e)
         {
-            Logger.Info("Database restored.");
+            Logger.Trace("Database restore complete.");
         }
 
 		String DefaultScriptVersionNumberGetter(String scriptName)
@@ -339,7 +339,7 @@ namespace Codaxy.Common.SqlServer
 				}
 			}
 			catch { }
-			throw new InvalidOperationException();
+            throw new InvalidOperationException(String.Format("Cannot determine database version number from script name '{0}'.", scriptName));
 		}
     }
 

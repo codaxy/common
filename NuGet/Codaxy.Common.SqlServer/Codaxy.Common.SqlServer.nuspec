@@ -3,7 +3,7 @@
   <metadata schemaVersion="2">
     <id>Codaxy.Common.SqlServer</id>    
     <title>Codaxy.Common.SqlServer Library</title>
-    <version>0.5.7.4</version>
+    <version>0.5.7.5</version>
     <authors>Codaxy</authors>
     <description>Codaxy.Common.SqlServer Library provides helpers for programatic database schema upgrade scenarios.</description>
 	<dependencies>
