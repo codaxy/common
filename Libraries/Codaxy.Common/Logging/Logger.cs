@@ -189,11 +189,16 @@ namespace Codaxy.Common.Logging
 				logger.LogFormat(LogLevel.Error, format, par);
 		}
 
-		public static void Exception(this Logger logger, Exception ex)
-		{
-			if (logger != null && ex!=null)
-				logger.Log(new LogMessage { Message = ex.Message, StackTrace = ex.StackTrace, Level = LogLevel.Error });
-		}
+        public static void Exception(this Logger logger, Exception ex)
+        {
+            if (logger != null && ex != null)
+                logger.Log(new LogMessage
+                {
+                    Message = ex.Message,
+                    StackTrace = ExpandStackTrace(ex),
+                    Level = LogLevel.Error
+                });
+        }
 
 		public static void Exception(this Logger logger, String message, Exception ex)
 		{
@@ -210,9 +215,7 @@ namespace Codaxy.Common.Logging
                     Level = LogLevel.Error
                 };
 
-            var stackTrace = ex.StackTrace;
-            if (ex.InnerException != null)
-                stackTrace += Environment.NewLine + Environment.NewLine + "Inner Exception: " + ex.InnerException.ToString();
+            var stackTrace = ExpandStackTrace(ex);
 
             return new LogMessage
             {
@@ -220,6 +223,14 @@ namespace Codaxy.Common.Logging
                 StackTrace = stackTrace,
                 Level = LogLevel.Error
             };
+        }
+
+        private static string ExpandStackTrace(Exception ex)
+        {
+            var stackTrace = ex.StackTrace;
+            if (ex.InnerException != null)
+                stackTrace += Environment.NewLine + Environment.NewLine + "Inner Exception: " + ex.InnerException.ToString();
+            return stackTrace;
         }
 
 		public static Logger ChildLogger(this Logger logger, String childLoggerName)
