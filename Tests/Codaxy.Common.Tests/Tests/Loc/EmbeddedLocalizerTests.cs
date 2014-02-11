@@ -25,5 +25,14 @@ namespace Codaxy.Common.Tests.Tests.Loc
                 Assert.AreEqual("This is a test message in Danish.", LocalizationUtil.Localize<Messages>().TestMessage);
             }
         }
+
+        [Test]
+        public void Test2()
+        {
+            using (var cs = new CultureScope("da-DK"))
+            {
+                Assert.AreEqual("This is a test message in Danish.", LocalizationUtil.CurrentCulture.Get(typeof(Messages))["TestMessage"]);
+            }
+        }
     }
 }

@@ -33,8 +33,12 @@ namespace Codaxy.Common.Localization
                 return (T)cres;
 
             var res = new T();
-            var locName = type.FullName;
+            SetLocalizedFieldValues(type, res);
+            return res;
+        }
 
+        private void SetLocalizedFieldValues(Type type, object res) 
+        {
             Field[] fields = GetTypeLocalizationData(type);
 
             if (fields != null)
@@ -50,8 +54,18 @@ namespace Codaxy.Common.Localization
             {
                 cache[type] = res;
             }
+        }
 
-            return res;
+        public Dictionary<string, string> Get(Type type)
+        {
+            object o;
+            if (!cache.TryGetValue(type, out o))
+            {
+                o = Activator.CreateInstance(type);
+                SetLocalizedFieldValues(type, o);
+            }
+
+            return LocalizationUtil.GetDictionary(o);
         }
 
         public Field[] GetTypeLocalizationData(Type type)

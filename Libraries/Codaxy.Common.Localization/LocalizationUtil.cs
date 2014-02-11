@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 
@@ -8,9 +9,9 @@ namespace Codaxy.Common.Localization
 {
     public static class LocalizationUtil
     {
-        public static Dictionary<String, String> GetDictionary<T>(T localization)
+        public static Dictionary<String, String> GetDictionary(object localization)
         {
-            var type = typeof(T);
+            var type = localization.GetType();
             var stringType = typeof(String);
             Dictionary<String, String> res = new Dictionary<string, string>();
             foreach (var f in type.GetFields())

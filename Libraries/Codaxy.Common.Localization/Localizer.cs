@@ -12,6 +12,7 @@ namespace Codaxy.Common.Localization
     public interface ILocalizationStore
     {
         T Get<T>() where T : new();
+        Dictionary<String, String> Get(Type t);
         Field[] GetTypeLocalizationData(Type t);
     }
 
@@ -52,6 +53,13 @@ namespace Codaxy.Common.Localization
         public Field[] GetTypeLocalizationData(Type t) { return null; }
 
         #endregion
+
+
+        public Dictionary<string, string> Get(Type t)
+        {
+            var instance = Activator.CreateInstance(t);
+            return LocalizationUtil.GetDictionary(instance);
+        }
     }
 
 
