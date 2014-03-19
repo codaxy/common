@@ -48,6 +48,13 @@ namespace Codaxy.Common.Text
             return Char.ToLower(source[0]) + source.Substring(1);
         }
 
+        public static string ToPascalCase(this String source)
+        {
+            if (string.IsNullOrEmpty(source))
+                return source;
+            return Char.ToUpper(source[0]) + source.Substring(1);
+        }
+
         public static String JoinNonEmpty(String sep, params String[] elements)
         {
             StringBuilder sb = new StringBuilder();
