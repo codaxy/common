@@ -200,7 +200,7 @@ namespace Codaxy.Common.SqlServer
                             if (!IgnoreScriptFailures)
                                 throw new ExecuteDatabaseScriptException(msg, ex, script.Script);
 
-                            Logger.Error(msg);
+                            Logger.Exception(msg, ex);
                             scriptSuccess = false;
                             errors = true;
                         }

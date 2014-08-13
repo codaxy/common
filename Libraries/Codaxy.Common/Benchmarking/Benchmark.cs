@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace Codaxy.Common.Benchmarking
 {
+    [DebuggerStepThrough]
     public class BenchmarkResult {
 
         public String Name { get; set; }        
