@@ -14,17 +14,26 @@ namespace ConsolePlayground
             using (var driver = new Codaxy.Common.SqlServer.SqlSchemaUpgradeManager
             {
                 BackupLocation = ".",
-                ConnectionString = "Server=.;Database=ECardDev;Integrated Security=True",                
-                GetVersionSqlCommandText = "SELECT [Current] FROM ec.[Version]",
-                SetVersionSqlCommandText = "UPDATE ec.[Version] SET [Current]='{Version}'",
+                ConnectionString = "Server=.;Database=UpgradeTesting;Integrated Security=True",
+                GetVersionSqlCommandText = "SELECT [Current] FROM dbo.[Version]",
+                SetVersionSqlCommandText = "UPDATE dbo.[Version] SET [Current]='{Version}'",
                 UpgradeBackupAndRestoreOnError = true,
-                Logger = new Logger(new ConsoleLogAppender(), "")                
+                IgnoreScriptFailures = true,
+                Logger = new Logger(new ConsoleLogAppender())
             })
-            {                
+            {
                 driver.UpgradeSchema(new SqlScript[] {  
                      new SqlScript { 
-                         SQL = "AAAFFF", 
+                         SQL = "SELECT 1", 
                          Name = "1000.sql"
+                     },
+                     new SqlScript { 
+                         SQL = "ERROR", 
+                         Name = "1001.sql"
+                     },
+                     new SqlScript { 
+                         SQL = "SELECT 2", 
+                         Name = "1002.sql"
                      }
                 });
             }

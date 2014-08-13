@@ -70,6 +70,11 @@ namespace Codaxy.Common.SqlServer
         /// </summary>
         public bool DeleteBackupFileAfterSuccessfulUpgrade { get; set; }
 
+        /// <summary>
+        /// Set to true to ignore and failures while executing upgrade scripts
+        /// </summary>
+        public bool IgnoreScriptFailures { get; set; }
+
         class ScriptInfo
         {
             public String Version { get; set; }
@@ -166,6 +171,8 @@ namespace Codaxy.Common.SqlServer
             if (db == null)
                 throw new InvalidDatabaseOperationException(String.Format("Database '{0}' not found on the server.", databaseName));
 
+            bool errors = false;
+
             try
             {
                 PrepareForUpgrade(server, databaseName, currentVersion);
@@ -181,26 +188,35 @@ namespace Codaxy.Common.SqlServer
                 foreach (var script in sortedScripts)
                     if (String.Compare(script.Version, currentVersion) > 0)
                     {
+                        bool scriptSuccess;
                         try
                         {
                             db.ExecuteNonQuery(script.Script.SQL);
+                            scriptSuccess = true;
                         }
                         catch (Exception ex)
                         {
-                            throw new ExecuteDatabaseScriptException(String.Format("Database script '{0}' failed. Check inner exception for more details.", script.Script.Name), ex, script.Script);
+                            var msg = String.Format("Database script '{0}' failed. Check inner exception for more details.", script.Script.Name);
+                            if (!IgnoreScriptFailures)
+                                throw new ExecuteDatabaseScriptException(msg, ex, script.Script);
+
+                            Logger.Error(msg);
+                            scriptSuccess = false;
+                            errors = true;
                         }
 
-                        try
-                        {
-                            db.ExecuteNonQuery(SetVersionSqlCommandText.Replace("{Version}", script.Version));
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new InvalidDatabaseOperationException("Setting the new database version failed. Check set version command and inner exception for more details.", ex);
-                        }
+                        if (scriptSuccess)
+                            try
+                            {
+                                db.ExecuteNonQuery(SetVersionSqlCommandText.Replace("{Version}", script.Version));
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new InvalidDatabaseOperationException("Setting the new database version failed. Check set version command and inner exception for more details.", ex);
+                            }
                     }
 
-                if (afterUpgradeScripts!=null)
+                if (afterUpgradeScripts != null)
                     foreach (var script in afterUpgradeScripts)
                         try
                         {
@@ -210,12 +226,16 @@ namespace Codaxy.Common.SqlServer
                         {
                             throw new ExecuteDatabaseScriptException(String.Format("Database script '{0}' failed. Check inner exception for more details.", script.Name), ex, script);
                         }
-                
-                Logger.InfoFormat("Database has been successfully upgraded to version '{0}'.", targetVersion);
+
+                if (errors)
+                    Logger.WarningFormat("Database has been upgraded to version '{0}' with errors. Please check previous log messages and fix all script errors.", targetVersion);
+                else
+                    Logger.InfoFormat("Database has been successfully upgraded to version '{0}'.", targetVersion);
+
                 FreeUpgradeResources();
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 CloseConnection();
                 try
