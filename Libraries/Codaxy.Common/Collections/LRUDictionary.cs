@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Codaxy.Common.Collections
 {
-    public class LRUDictonary<K, V> : IDictionary<K, V>
+    public class LRUDictionary<K, V> : IDictionary<K, V>
     {
         public int Capacity { get; set; }
 
-        public LRUDictonary(int capacity)
+        public LRUDictionary(int capacity)
         {
             if (capacity < 1)
                 throw new ArgumentOutOfRangeException("capacity must be > 0");
