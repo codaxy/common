@@ -75,6 +75,11 @@ namespace Codaxy.Common.SqlServer
         /// </summary>
         public bool IgnoreScriptFailures { get; set; }
 
+        /// <summary>
+        /// Set to true to hint SQL Server to compress the backup file.
+        /// </summary>
+        public bool CompressBackup { get; set; }
+
         class ScriptInfo
         {
             public String Version { get; set; }
@@ -294,6 +299,8 @@ namespace Codaxy.Common.SqlServer
                 bkpDBFull.BackupSetDescription = String.Format("{0} database - Full Backup. (Schema version: {1})", databaseName, currentVersion);
                 bkpDBFull.ExpirationDate = DateTime.Today.AddDays(1);
                 bkpDBFull.Initialize = true;
+                if (CompressBackup)
+                    bkpDBFull.CompressionOption = BackupCompressionOptions.On;
                 bkpDBFull.PercentComplete += bkpDBFull_PercentComplete;
                 bkpDBFull.Complete += bkpDBFull_Complete;
                 bkpDBFull.SqlBackup(server);                
