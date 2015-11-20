@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.IO;
+using System.Reflection;
 
 namespace Codaxy.Common.Localization
 {
@@ -14,6 +15,7 @@ namespace Codaxy.Common.Localization
         T Get<T>() where T : new();
         Dictionary<String, String> Get(Type t);
         Field[] GetTypeLocalizationData(Type t);
+        Field[] GetTypeLocalizationData(string localizationName, Assembly assembly);
     }
 
     public interface ILocalizer
@@ -51,6 +53,7 @@ namespace Codaxy.Common.Localization
         }
 
         public Field[] GetTypeLocalizationData(Type t) { return null; }
+        public Field[] GetTypeLocalizationData(string localizationName, Assembly assembly) { return null; }
 
         #endregion
 

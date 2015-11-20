@@ -70,12 +70,16 @@ namespace Codaxy.Common.Localization
 
         public Field[] GetTypeLocalizationData(Type type)
         {
-            var locName = type.FullName;
+            return GetTypeLocalizationData(type.FullName, type.Assembly);
+        }
+
+        public Field[] GetTypeLocalizationData(string localizationName, Assembly assembly)
+        {            
             Field[] res;
-            if (localizationData.TryGetValue(locName, out res))
+            if (localizationData.TryGetValue(localizationName, out res))
                 return res;
-            LoadAssemblyLocalizationData(type.Assembly);
-            if (localizationData.TryGetValue(locName, out res))
+            LoadAssemblyLocalizationData(assembly);
+            if (localizationData.TryGetValue(localizationName, out res))
                 return res;
             return null;
         }
