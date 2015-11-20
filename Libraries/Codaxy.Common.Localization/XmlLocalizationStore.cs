@@ -15,7 +15,7 @@ namespace Codaxy.Common.Localization
         {
             Path = path;
             LangCode = langCode;
-            cache = new Dictionary<string, object>();
+            cache = new Dictionary<Type, object>();
             loadedAssemblies = new HashSet<string>();
             localizationData = new LocalizationData();
             this.providers = providers;
@@ -57,39 +57,34 @@ namespace Codaxy.Common.Localization
             return new LocalizationData();
         }
 
-        Dictionary<string, object> cache;
+        Dictionary<Type, object> cache;
         HashSet<String> loadedAssemblies;
         LocalizationData localizationData;        
 
         public T Get<T>() where T : new()
         {
-            return Get<T>(string.Empty);
-        }
-        
-        public T Get<T>(string typeNameSuffix) where T : new()
-        {
             var type = typeof(T);
-            var cacheKey = type.FullName + typeNameSuffix;
             object cres;
-            if (cache.TryGetValue(cacheKey, out cres))
+            if (cache.TryGetValue(type, out cres))
                 return (T)cres;
 
             var res = new T();
-            
-            Field[] fields = GetTypeLocalizationData(type, typeNameSuffix);
+            var locName = type.FullName;
 
-            if (fields != null)
+            Field[] fields = GetTypeLocalizationData(type);
+            
+            if (fields!=null)
                 foreach (var f in fields)
                 {
                     var finfo = type.GetField(f.FieldName);
                     if (finfo != null)
                         finfo.SetValue(res, f.LocalizedText);
                 }
-
+            
 
             lock (cache)
             {
-                cache[cacheKey] = res;
+                cache[type] = res;
             }
 
             return res;
@@ -97,25 +92,16 @@ namespace Codaxy.Common.Localization
 
         public Field[] GetTypeLocalizationData(Type type)
         {
-            return GetTypeLocalizationData(type, string.Empty);
-        }
-
-        public Field[] GetTypeLocalizationData(Type type, string typeNameSuffix)
-        {
-            return GetTypeLocalizationData(type.FullName + typeNameSuffix, type.Assembly);
-        }
-
-        public Field[] GetTypeLocalizationData(string typeName, Assembly assembly)
-        {            
+            var locName = type.FullName;
             Field[] res;
-            if (localizationData.TryGetValue(typeName, out res))
+            if (localizationData.TryGetValue(locName, out res))
                 return res;
-            LoadAssemblyLocalizationData(assembly);
-            if (localizationData.TryGetValue(typeName, out res))
+            LoadAssemblyLocalizationData(type.Assembly);
+            if (localizationData.TryGetValue(locName, out res))
                 return res;
             return null;
         }
-        
+
         void LoadAssemblyLocalizationData(Assembly assembly)
         {
             var assemblyName = LocalizationAssemblyHelper.GetAssemblyName(assembly);

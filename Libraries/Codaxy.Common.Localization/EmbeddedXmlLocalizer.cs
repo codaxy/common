@@ -38,9 +38,5 @@ namespace Codaxy.Common.Localization
         {
             return GetLocalizationStore(langCode).Get<T>();
         }
-        public T Get<T>(string langCode, string typeNameSuffix) where T : new()
-        {
-            return GetLocalizationStore(langCode).Get<T>(typeNameSuffix);
-        }
     }
 }
