@@ -16,26 +16,31 @@ namespace Codaxy.Common.Localization
         public EmbeddedXmlLocalizationStore(String langCode)
         {
             LangCode = langCode;
-            cache = new Dictionary<Type, object>();
+            cache = new Dictionary<string, object>();
             loadedAssemblies = new HashSet<Assembly>();
             localizationData = new LocalizationData();
         }
 
-        Dictionary<Type, object> cache;
+        Dictionary<string, object> cache;
         HashSet<Assembly> loadedAssemblies;
         LocalizationData localizationData;
 
         public T Get<T>() where T : new()
         {
+            return Get<T>(string.Empty);
+        }
+
+        public T Get<T>(string typeNameSuffix) where T : new()
+        {
             var type = typeof(T);
+            var cacheKey = type.FullName + typeNameSuffix;
             object cres;
-            if (cache.TryGetValue(type, out cres))
+            if (cache.TryGetValue(cacheKey, out cres))
                 return (T)cres;
 
-            var res = new T();
-            var locName = type.FullName;
+            var res = new T();            
 
-            Field[] fields = GetTypeLocalizationData(type);
+            Field[] fields = GetTypeLocalizationData(type, typeNameSuffix);
 
             if (fields != null)
                 foreach (var f in fields)
@@ -48,7 +53,7 @@ namespace Codaxy.Common.Localization
 
             lock (cache)
             {
-                cache[type] = res;
+                cache[cacheKey] = res;
             }
 
             return res;
@@ -56,16 +61,25 @@ namespace Codaxy.Common.Localization
 
         public Field[] GetTypeLocalizationData(Type type)
         {
-            var locName = type.FullName;
+            return GetTypeLocalizationData(type.FullName, type.Assembly);
+        }
+
+        public Field[] GetTypeLocalizationData(Type type, string typeNameSuffix)
+        {
+            return GetTypeLocalizationData(type.FullName + typeNameSuffix, type.Assembly);
+        }
+
+        public Field[] GetTypeLocalizationData(string typeName, Assembly assembly)
+        {         
             Field[] res;
-            if (localizationData.TryGetValue(locName, out res))
+            if (localizationData.TryGetValue(typeName, out res))
                 return res;
-            LoadAssemblyLocalizationData(type.Assembly);
-            if (localizationData.TryGetValue(locName, out res))
+            LoadAssemblyLocalizationData(assembly);
+            if (localizationData.TryGetValue(typeName, out res))
                 return res;
             return null;
         }
-
+        
         void LoadAssemblyLocalizationData(Assembly assembly)
         {
             if (loadedAssemblies.Contains(assembly))

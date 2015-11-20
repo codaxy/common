@@ -41,10 +41,20 @@ namespace Codaxy.Common.Localization
             return CurrentCulture.Get<T>();
         }
 
+        public static T Localize<T>(string typeNameSuffix) where T : new()
+        {
+            return CurrentCulture.Get<T>(typeNameSuffix);
+        }
+
         public static T LocalizeUI<T>() where T : new()
         {
             return CurrentUICulture.Get<T>();
-        }        
+        }
+
+        public static T LocalizeUI<T>(string typeNameSuffix) where T : new()
+        {
+            return CurrentUICulture.Get<T>(typeNameSuffix);
+        }
 
         public static void WriteLocalizationFiles(String outputDirectoryPath, IEnumerable<ILocalizationDataProvider> providers)
         {
