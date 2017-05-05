@@ -11,7 +11,7 @@ namespace Codaxy.Common.SqlServer
 {
 	public class SqlScriptUtil
 	{
-		public static SqlScript[] ReadZipArchive(Stream zipPackageStream)
+		public static SqlScript[] ReadZipArchive(Stream zipPackageStream, Encoding encoding = null)
 		{
 			List<SqlScript> result = new List<SqlScript>();
 			using (var zipFile = new ZipFile(zipPackageStream))
@@ -21,7 +21,7 @@ namespace Codaxy.Common.SqlServer
 					if (ze.Name.EndsWith(".sql", StringComparison.InvariantCultureIgnoreCase))
 					{
 						using (var zs = zipFile.GetInputStream(ze))
-						using (var sr = new StreamReader(zs))
+						using (var sr = new StreamReader(zs, encoding ?? Encoding.UTF8))
 						{
 							var command = sr.ReadToEnd();
 							result.Add(new SqlScript
@@ -36,18 +36,18 @@ namespace Codaxy.Common.SqlServer
 			return result.OrderBy(a=>a.Name).ToArray();
 		}
 
-		public static SqlScript[] ReadDirectory(String directoryPath)
+		public static SqlScript[] ReadDirectory(String directoryPath, Encoding encoding = null)
 		{
 			List<SqlScript> result = new List<SqlScript>();
 			var info = new DirectoryInfo(directoryPath);
 			foreach (var file in info.GetFiles("*.sql"))
 			{
-				result.Add(new SqlScript { SQL = File.ReadAllText(file.FullName), Name = file.Name });
+				result.Add(new SqlScript { SQL = File.ReadAllText(file.FullName, encoding ?? Encoding.UTF8), Name = file.Name });
 			}
 			return result.OrderBy(a=>a.Name).ToArray();
 		}
 
-        public static SqlScript[] ReadEmbeddedDirectory(Assembly assembly, String directory, bool absolutePath=false)
+        public static SqlScript[] ReadEmbeddedDirectory(Assembly assembly, String directory, bool absolutePath = false, Encoding encoding = null)
         {
             List<SqlScript> result = new List<SqlScript>();
 
@@ -61,7 +61,7 @@ namespace Codaxy.Common.SqlServer
                     var fileName = file.Substring(internalDirectory.Length);
 
                     using (var fs = assembly.GetManifestResourceStream(file))
-                    using (var sr = new StreamReader(fs))
+                    using (var sr = new StreamReader(fs, encoding ?? Encoding.UTF8))
                     {
                         var command = sr.ReadToEnd();
                         result.Add(new SqlScript
