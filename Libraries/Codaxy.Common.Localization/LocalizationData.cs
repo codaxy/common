@@ -54,7 +54,7 @@ namespace Codaxy.Common.Localization
         internal void Include(Dictionary<string, Field[]> data)
         {
             foreach (var od in data)
-                Data.Add(od.Key, od.Value);
+                Data[od.Key] =  od.Value;
         }
 
         public void WriteXml(XmlWriter xw)
