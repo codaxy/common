@@ -30,6 +30,7 @@ namespace Codaxy.Common.SqlServer
 			GetVersionSqlCommandText = "SELECT [Current] FROM [Version]";
 			SetVersionSqlCommandText = "UPDATE [Version] SET [Current]='{Version}'";
 			ScriptVersionNumberGetter = DefaultScriptVersionNumberGetter;
+            LogScriptSuccess = true;
 		}
 
 		/// <summary>
@@ -64,6 +65,10 @@ namespace Codaxy.Common.SqlServer
 		/// </summary>
         public String SetVersionSqlCommandText { get; set; }
 
+        /// <summary>
+		/// Set to true to log script successful execution
+		/// </summary>
+        public bool LogScriptSuccess { get; set; }
 
         /// <summary>
         /// Set to true to delete backup file if upgrade is sucessfull.
@@ -214,6 +219,8 @@ namespace Codaxy.Common.SqlServer
                             try
                             {
                                 db.ExecuteNonQuery(SetVersionSqlCommandText.Replace("{Version}", script.Version));
+                                if (LogScriptSuccess)
+                                    Logger.TraceFormat("Database script '{0}' successfully executed.", script.Version);
                             }
                             catch (Exception ex)
                             {
