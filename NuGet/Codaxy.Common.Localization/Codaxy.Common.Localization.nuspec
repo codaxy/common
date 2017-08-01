@@ -3,11 +3,11 @@
   <metadata schemaVersion="2">
     <id>Codaxy.Common.Localization</id>    
     <title>Codaxy.Common.Localization Library</title>
-    <version>0.5.9.4</version>
+    <version>1.0.0</version>
     <authors>Codaxy</authors>
     <description>Codaxy.Common.Localization Library provides helpers for application localization</description>
 	<dependencies>
-		<dependency id="Codaxy.Common" version="0.5.16.11" />
+		<dependency id="Codaxy.Common" version="1.0.0" />
 	</dependencies>
 	<projectUrl>https://github.com/codaxy/common</projectUrl></metadata>
 </package>

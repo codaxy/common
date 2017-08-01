@@ -3,11 +3,11 @@
   <metadata schemaVersion="2">
     <id>Codaxy.Common.SqlServer</id>    
     <title>Codaxy.Common.SqlServer Library</title>
-    <version>0.6.0.5</version>
+    <version>1.0.0</version>
     <authors>Codaxy</authors>
     <description>Codaxy.Common.SqlServer Library provides helpers for programatic database schema upgrade scenarios.</description>
 	<dependencies>
-		<dependency id="Codaxy.Common" version="0.5.16.11" />
+		<dependency id="Codaxy.Common" version="1.0.0" />
 		<dependency id="SharpZipLib" version="0.86.0" />    
 	</dependencies>
 	<projectUrl>https://github.com/codaxy/common</projectUrl></metadata>

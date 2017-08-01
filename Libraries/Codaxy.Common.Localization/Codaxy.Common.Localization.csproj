@@ -67,11 +67,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Codaxy.Common\Codaxy.Common.csproj">
-      <Project>{02C30976-A2C3-457D-ABB9-83F517FD063F}</Project>
+      <Project>{02c30976-a2c3-457d-abb9-83f517fd063f}</Project>
       <Name>Codaxy.Common</Name>
     </ProjectReference>
   </ItemGroup>
