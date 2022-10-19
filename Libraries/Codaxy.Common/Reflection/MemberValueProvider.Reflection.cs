@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Codaxy.Common.Reflection
 {
-    class ReflectionMemberValueProvider : IMemberValueProvider
+    public class ReflectionMemberValueProvider : IMemberValueProvider
     {
         MemberInfo memberInfo;
         public ReflectionMemberValueProvider(MemberInfo info)

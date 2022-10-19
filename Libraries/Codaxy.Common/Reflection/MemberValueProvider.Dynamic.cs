@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Codaxy.Common.Reflection
 {
-    class DynamicMemberValueProvider : IMemberValueProvider
+    public class DynamicMemberValueProvider : IMemberValueProvider
     {
         private readonly MemberInfo memberInfo;
         private Func<object, object> getter;

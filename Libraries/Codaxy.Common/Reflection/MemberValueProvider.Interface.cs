@@ -5,11 +5,9 @@ using System.Text;
 
 namespace Codaxy.Common.Reflection
 {
-    interface IMemberValueProvider
+    public interface IMemberValueProvider
     {
         object GetValue(object target);
         void SetValue(object target, object value);
     }
-
-
 }
