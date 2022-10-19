@@ -1,27 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codaxy.Common", "Libraries\Codaxy.Common\Codaxy.Common.csproj", "{02C30976-A2C3-457D-ABB9-83F517FD063F}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codaxy.Common", "Libraries\Codaxy.Common\Codaxy.Common.csproj", "{02C30976-A2C3-457D-ABB9-83F517FD063F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codaxy.Common.Localization", "Libraries\Codaxy.Common.Localization\Codaxy.Common.Localization.csproj", "{76F86DBB-F340-4F23-8038-81572E1C34C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codaxy.Common.Localization", "Libraries\Codaxy.Common.Localization\Codaxy.Common.Localization.csproj", "{76F86DBB-F340-4F23-8038-81572E1C34C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codaxy.Common.SqlServer", "Libraries\Codaxy.Common.SqlServer\Codaxy.Common.SqlServer.csproj", "{E4A358E2-2A98-4C47-83D7-F57E12A3C9C0}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuSpec", "NuSpec", "{53D1E255-7E03-46B4-9DDA-B1730126728B}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\Codaxy.Common.Localization\Codaxy.Common.Localization.nuspec = NuGet\Codaxy.Common.Localization\Codaxy.Common.Localization.nuspec
-		NuGet\Codaxy.Common\Codaxy.Common.nuspec = NuGet\Codaxy.Common\Codaxy.Common.nuspec
-		NuGet\Codaxy.Common.SqlServer\Codaxy.Common.SqlServer.nuspec = NuGet\Codaxy.Common.SqlServer\Codaxy.Common.SqlServer.nuspec
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsolePlayground", "Tests\ConsolePlayground\ConsolePlayground.csproj", "{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codaxy.Common.Tests", "Tests\Codaxy.Common.Tests\Codaxy.Common.Tests.csproj", "{6420CF1D-7CD9-4752-B62B-8A449D3F3277}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{E85ADE73-7664-4663-AAE0-E4A52A2188E8}"
-	ProjectSection(SolutionItems) = preProject
-		Automatically embedding SQL scripts.txt = Automatically embedding SQL scripts.txt
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Codaxy.Common.Tests", "Tests\Codaxy.Common.Tests\Codaxy.Common.Tests.csproj", "{6420CF1D-7CD9-4752-B62B-8A449D3F3277}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,53 +24,42 @@ Global
 		{02C30976-A2C3-457D-ABB9-83F517FD063F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{02C30976-A2C3-457D-ABB9-83F517FD063F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{02C30976-A2C3-457D-ABB9-83F517FD063F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{02C30976-A2C3-457D-ABB9-83F517FD063F}.Debug|x86.Build.0 = Debug|Any CPU
 		{02C30976-A2C3-457D-ABB9-83F517FD063F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02C30976-A2C3-457D-ABB9-83F517FD063F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{02C30976-A2C3-457D-ABB9-83F517FD063F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{02C30976-A2C3-457D-ABB9-83F517FD063F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{02C30976-A2C3-457D-ABB9-83F517FD063F}.Release|x86.ActiveCfg = Release|Any CPU
+		{02C30976-A2C3-457D-ABB9-83F517FD063F}.Release|x86.Build.0 = Release|Any CPU
 		{76F86DBB-F340-4F23-8038-81572E1C34C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{76F86DBB-F340-4F23-8038-81572E1C34C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76F86DBB-F340-4F23-8038-81572E1C34C8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{76F86DBB-F340-4F23-8038-81572E1C34C8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{76F86DBB-F340-4F23-8038-81572E1C34C8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{76F86DBB-F340-4F23-8038-81572E1C34C8}.Debug|x86.Build.0 = Debug|Any CPU
 		{76F86DBB-F340-4F23-8038-81572E1C34C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76F86DBB-F340-4F23-8038-81572E1C34C8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{76F86DBB-F340-4F23-8038-81572E1C34C8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{76F86DBB-F340-4F23-8038-81572E1C34C8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{76F86DBB-F340-4F23-8038-81572E1C34C8}.Release|x86.ActiveCfg = Release|Any CPU
-		{E4A358E2-2A98-4C47-83D7-F57E12A3C9C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4A358E2-2A98-4C47-83D7-F57E12A3C9C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4A358E2-2A98-4C47-83D7-F57E12A3C9C0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{E4A358E2-2A98-4C47-83D7-F57E12A3C9C0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{E4A358E2-2A98-4C47-83D7-F57E12A3C9C0}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E4A358E2-2A98-4C47-83D7-F57E12A3C9C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4A358E2-2A98-4C47-83D7-F57E12A3C9C0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E4A358E2-2A98-4C47-83D7-F57E12A3C9C0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{E4A358E2-2A98-4C47-83D7-F57E12A3C9C0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{E4A358E2-2A98-4C47-83D7-F57E12A3C9C0}.Release|x86.ActiveCfg = Release|Any CPU
-		{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}.Debug|x86.ActiveCfg = Debug|x86
-		{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}.Debug|x86.Build.0 = Debug|x86
-		{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}.Release|Any CPU.ActiveCfg = Release|x86
-		{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}.Release|Mixed Platforms.Build.0 = Release|x86
-		{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}.Release|x86.ActiveCfg = Release|x86
-		{0F08A47B-E453-4411-9C2B-0FF4C22F0AD5}.Release|x86.Build.0 = Release|x86
-		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|x86.ActiveCfg = Debug|x86
-		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|x86.Build.0 = Debug|x86
-		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|Any CPU.ActiveCfg = Release|x86
-		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|Mixed Platforms.Build.0 = Release|x86
-		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|x86.ActiveCfg = Release|x86
-		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|x86.Build.0 = Release|x86
+		{76F86DBB-F340-4F23-8038-81572E1C34C8}.Release|x86.Build.0 = Release|Any CPU
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Debug|x86.Build.0 = Debug|Any CPU
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|x86.ActiveCfg = Release|Any CPU
+		{6420CF1D-7CD9-4752-B62B-8A449D3F3277}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {31CE90C4-B46B-4EE2-9647-A5600C0A5DDC}
 	EndGlobalSection
 EndGlobal

@@ -22,7 +22,7 @@ namespace Common.Reflection
 
         private Math(Type valueType)
         {
-            if (!TypeInfo.IsNumericType(valueType))
+            if (!Codaxy.Common.Numeric.IsNumericType(valueType))
                 throw new Exception("Numeric type is required for math!");
 
             Min = MathExpressionHelper.GetMinDelegate<BinOp>(valueType, typeof(object));
@@ -31,7 +31,7 @@ namespace Common.Reflection
             Sum = MathExpressionHelper.GetSumDelegate<BinOp>(valueType, typeof(object));
             Multiply = MathExpressionHelper.GetMultiplyDelegate<BinOp>(valueType, typeof(object));            
 
-            if (TypeInfo.IsNullableType(valueType))
+            if (Codaxy.Common.Nullable.IsNullableType(valueType))
             {
                 var nc = new NullableConverter(valueType);
                 Zero = nc.ConvertFrom(Convert.ChangeType(0, Nullable.GetUnderlyingType(valueType)));
